@@ -37,3 +37,12 @@ The authors of the blog are:
 
 
 
+### The following blog post contain guides related to writing function: 
+
+SG: add link once finalized and authors please edit. 
+
+1) To setup your porject and load data, by Brock Rowley
+
+2) To to subset data and output basic descriptives, by Stephanie Gluck and Akhila Nekkanti
+
+3) To visualize your data, by Joanna Wright
