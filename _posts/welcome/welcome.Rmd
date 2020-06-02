@@ -1,10 +1,9 @@
 ---
 title: "Welcome to Functional Programming Blog"
 description: |
-  Welcome to our new blog, Functional Programming Blog. We hope you enjoy 
-  reading what we have to say!
+  Welcome to our class project blog
 author:
-  - name: Nora Jones 
+  - name: SG, AK, BR, JW 
     url: https://s-gluck.github.io/funprog_blog
     affiliation: University of Oregon
     affiliation_url: https://uoregon.edu
@@ -22,26 +21,19 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```
 
-Criteria for project:
+Welcome to our class project blog. This blog was created as part of the final project for EDUC610 [
+Functional Programming with R
+](https://uo-datasci-specialization.github.io/c3-fun_program2020/index.html) taught by [Daniel Anderson](https://github.com/datalorax) at the University of Oregon. The blog contains tutorial type guides on the basic of writing function in R to automate your data workflow and analysis. 
 
-1) No code is used repetitively (no more than twice) [10 points]
+The authors of the blog are: 
 
-2) More than one variant of purrr::map is used [10 points]
+[Stephanie Gluck](https://github.com/s-gluck)
 
-3) At least one {purrr} function outside the basic map family (walk_*, reduce, modify_*, etc.) [10 points]
+[Akhila Nekkanti](https://github.com/akhilanekkanti1) 
 
-4) At least one instance of parallel iteration (e.g., map2_*, pmap_*) [10 points]
+[Brock Rowley](https://github.com/RowleyBrock) 
 
-5) At least one use case of purrr::nest %>% mutate() [10 points]
+[Joanna Wright](https://github.com/jhwrigh23) 
 
-6) At least two custom functions [20 points; 10 points each].
-Each function must do exactly one thing. 
-The functions may replicate the behavior of a base function - as noted above this is about practicing the skills you learn in class. 
-
-7) Code is fully reproducible and housed on GitHub [10 points]
-
-8) No obvious errors in chosen output format [10 points]
-
-9) Deployed on the web and shareable through a link [10 points]
 
 

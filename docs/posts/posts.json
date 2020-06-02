@@ -48,35 +48,19 @@
     "input_file": {}
   },
   {
-    "path": "posts/2020-05-08-joannapost1/",
-    "title": "joanna_post1",
-    "description": "Description here",
-    "author": [
-      {
-        "name": "Joanna Wright",
-        "url": "https://example.com/norajones"
-      }
-    ],
-    "date": "2020-05-08",
-    "categories": [],
-    "preview": {},
-    "last_modified": "2020-05-19T13:12:09-07:00",
-    "input_file": {}
-  },
-  {
     "path": "posts/welcome/",
     "title": "Welcome to Functional Programming Blog",
-    "description": "Welcome to our new blog, Functional Programming Blog. We hope you enjoy \nreading what we have to say!",
+    "description": "Welcome to our class project blog",
     "author": [
       {
-        "name": "Nora Jones",
+        "name": "SG, AK, BR, JW",
         "url": "https://s-gluck.github.io/funprog_blog"
       }
     ],
     "date": "2020-05-08",
     "categories": [],
     "preview": {},
-    "last_modified": "2020-05-09T23:02:11-07:00",
-    "input_file": {}
+    "last_modified": "2020-06-01T21:47:48-07:00",
+    "input_file": "welcome.utf8.md"
   }
 ]
