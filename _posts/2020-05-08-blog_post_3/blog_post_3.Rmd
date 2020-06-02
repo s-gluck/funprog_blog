@@ -1,11 +1,11 @@
 ---
 title: "Post 3"
 description: |
-  Using iteration and writing functions to create plots. 
+  A tutorial on how to use iteration and write a function to create plots. 
 author:
   - name: Joanna Wright
-    url: https://example.com/norajones
-date: 05-08-2020
+    url: https://s-gluck.github.io/funprog_blog
+date: 06-01-2020
 output:
   distill::distill_article:
     self_contained: false
@@ -87,27 +87,44 @@ plots_workplaces$plots[1:19]
 
 ```
 
-Let's tidy up this plot a bit more.  
-To add a unique title to each plot, use `{..1}` to select the 1st column, country, to insert country names into the title. 
+Let's tidy up this plot a bit more.
+
+Since we are using pmap, we can add a unique title to each plot with `{..1}` to select the 1st column (country) to insert country names into the title.
+A few other visualization adjustments... 
 
 ```{r adding unique title to each plot with country name}
 
-# adding unique title: 
-plots_workplaces1 <- d %>%
+plots_workplaces <- d %>%
   group_by(country) %>% 
     nest() %>%
     mutate(plots = pmap(list(country, data),
     ~ggplot(..2, aes(date, workplaces)) +
-      geom_line() +
-      geom_point() + 
-      theme(axis.title.x = element_blank()) +
-      labs(title = glue("Mobility trends for workplaces in {..1}"), #unique title
-           y = "% change"))
+      geom_line(color = "grey70") +
+      geom_point(aes(color = workplaces > 0), 
+                 size = 2) +
+      scale_color_brewer(palette = "Set2") +      
+      theme(axis.title.x = element_blank(), 
+            legend.position = 'none', 
+            plot.background = element_rect(fill="gray20"),
+            panel.background = element_rect(fill="gray20"),
+            panel.grid.minor = element_blank(), 
+            plot.title = element_text(color="white",
+                                      hjust= 0,
+                                      vjust=1, 
+                                      size=rel(1.5)), 
+            axis.text = element_text(color="white", 
+                               size=rel(1.5)),
+            axis.text.y  = element_text(hjust=1), 
+            axis.title.y = element_text(color = "white"),
+            plot.caption = element_text(color = "white")) +
+      labs(title = glue("Mobility trends to/from workplaces in {..1}"), #unique title
+           y = "% change in mobility", 
+           caption = "Googlemaps data from https://www.kaggle.com/gustavomodelli/covid-community-measures "))
     )
 
 # testing: 
-plots_workplaces1$plots[1]
-plots_workplaces1$plots[2]
+plots_workplaces$plots[1]
+plots_workplaces$plots[2]
 
 # or we could see all of them: 
 # plots_workplaces1$plots[1:19]
@@ -198,7 +215,7 @@ d1 <- d %>%
 lm_by_country_lists <- d1 %>% 
   split(.$country) %>% # split into separate tbl for each country
   map(~lm(total_mob ~ total_cases, data = .)) # for each, fit lm
-# Outputs a nested list
+# Outputs a nested lis
 
 ```
 
@@ -210,3 +227,53 @@ slopes <- lm_by_country_lists %>%
     map_dbl(2)
 slopes
 ```
+
+Plotting lm for each country:
+
+```{r}
+
+# Q for DA: How to use what I've done thus far to plot? 
+
+```
+
+
+PLAYING WITH VIZ
+```{r}
+
+# adding unique title: 
+plots_tmp <- d %>%
+  group_by(country) %>% 
+    nest() %>%
+    mutate(plots = pmap(list(country, data),
+    ~ggplot(..2, aes(date, workplaces)) +
+      geom_line(color = "grey40") +
+      geom_point(aes(color = workplaces > 0), 
+                 size = 2) +
+      scale_color_brewer(palette = "Set2") +      
+      theme(axis.title.x = element_blank(), 
+            legend.position = 'none', 
+            plot.background = element_rect(fill="gray20"),
+            panel.background = element_rect(fill="gray20"), 
+            plot.title = element_text(color="white",
+                                      hjust= 0,
+                                      vjust=1, 
+                                      size=rel(1.5)), 
+      axis.text = element_text(color="white", 
+                               size=rel(1.5)),
+      axis.text.y  = element_text(hjust=1), 
+      axis.title.y = element_text(color = "white"),
+      plot.caption = element_text(color = "white")) +
+      labs(title = glue("Mobility trends to/from workplaces in {..1}"), #unique title
+           y = "% change in mobility", 
+           caption = "Googlemaps data from https://www.kaggle.com/gustavomodelli/covid-community-measures "))
+    )
+
+# testing: 
+plots_tmp$plots[1]
+plots_tmp$plots[2]
+
+
+
+
+```
+
