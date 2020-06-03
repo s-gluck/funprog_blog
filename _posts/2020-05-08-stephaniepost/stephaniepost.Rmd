@@ -217,8 +217,10 @@ map_dbl(d2$data, ncol)
 
 #if you want to find the mean for just one specif column, by each country and week. Here we look at the mean for residential for each country across all 7 weeks. 
 avg <- map_dbl(d2$data, ~mean(.x$residential))
+avg
 
 index <- d2 %>% select(country, week)
+index
 
 test <- tibble(index, `residential avg` = avg)
 test
@@ -248,8 +250,7 @@ Next, we can attempt to loop through each cell in the 'data' column (that is, gr
 ```{r, eval = TRUE, echo = TRUE}
 
 residential_mean <- d2 %>% 
-  mutate(mean = map(data, ~mean(.x$residential))) %>% 
-  unnest(mean)
+  mutate(mean = map_dbl(data, ~mean(.x$residential)))
 
 print(residential_mean)
 
@@ -257,6 +258,73 @@ print(residential_mean)
 
 
 Finally, we can generalize this further to loop through each cell in the data column, to get the mean for each variable (not just residential).
+
+```{r}
+#Meeting w DA
+
+tmp <- d2[[3]][[1]]
+
+d2 %>%
+  mutate(descrip = map(data, est_all_descrip)) %>% 
+  select(-data) %>% 
+  unnest(descrip)
+
+descrips_df <- function(df, funs_to_apply = list(n = function(x) length(x),
+                                                     mean = function(x) mean(x, na.rm = TRUE),
+                                                     sd = function(x) sd(x, na.rm = TRUE),
+                                                     min = function(x) min(x, na.rm = TRUE),
+                                                     max = function(x) max(x, na.rm = TRUE))) {
+  df %>%
+    mutate(descrip = map(data, est_all_descrip, funs_to_apply)) %>% 
+    select(-data) %>% 
+    unnest(descrip)
+}
+
+descrips_df(d2, mean)
+
+tmp2
+
+tibble(variable = names(tmp2),
+       mean = map_dbl(tmp2, mean, na.rm = TRUE),
+       sd   = map_dbl(tmp2, sd, na.rm = TRUE))
+
+est_one_col <- function(funs, col) {
+ map_dbl(funs, function(f) f(col))
+}
+
+est_one_fun <- function(df, f) {
+ map_dbl(df, ~f(.x))
+}
+
+est_one_col(list(mean, max), tmp$grocery_pharmacy)
+est_one_fun(tmp[map_lgl(tmp, is.numeric)], mean)
+
+est_all_descrip <- function(df, funs_to_apply = list(n = function(x) length(x),
+                                                     mean = function(x) mean(x, na.rm = TRUE),
+                                                     sd = function(x) sd(x, na.rm = TRUE),
+                                                     min = function(x) min(x, na.rm = TRUE),
+                                                     max = function(x) max(x, na.rm = TRUE))) {
+  
+  numeric_df <- df[map_lgl(df, is.numeric)]
+  
+  # Method 1
+  #map_df(numeric_df, ~est_one_col(funs_to_apply, .x))
+  
+  # Method 2
+  map_df(funs_to_apply, ~est_one_fun(numeric_df, .x)) #%>% 
+   # mutate(column = names(numeric_df)) %>% 
+   # select(column, everything())
+  
+  # Method 3
+  # map_df(funs_to_apply, function(f) map_dbl(numeric_df, function(column) f(column))) %>% 
+  #   mutate(column = names(numeric_df))
+  
+}
+est_all_descrip(tmp, mean)
+map_df(list(mn = mean, stdev = sd), ~est_one_fun(tmp[map_lgl(tmp, is.numeric)], .x))
+
+```
+
 
 ```{r error = TRUE}
 
@@ -308,7 +376,7 @@ means_test <- d2 %>%
 
 ```
 
-## General Descriptives with Anonymous Function
+## General Descriptives with Custom Function
 
 ```{r, eval = TRUE, echo = TRUE}
 
@@ -337,7 +405,6 @@ des_d
 
 #this also works
 descriptives(d, residential)
-
 
 ```
 
