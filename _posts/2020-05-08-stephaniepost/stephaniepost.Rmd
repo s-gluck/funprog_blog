@@ -215,8 +215,13 @@ map_dbl(d2$data, nrow)
 
 map_dbl(d2$data, ncol)
 
-#if you want to find the mean for just one specif column, by each country and week
-map_dbl(d2$data, ~mean(.x$residential))
+#if you want to find the mean for just one specif column, by each country and week. Here we look at the mean for residential for each country across all 7 weeks. 
+avg <- map_dbl(d2$data, ~mean(.x$residential))
+
+index <- d2 %>% select(country, week)
+
+test <- tibble(index, `residential avg` = avg)
+test
 
 ```
 
@@ -271,24 +276,35 @@ test[[1]]
 #can't get it to generalize across all the different settings 
 test2 <- d2 %>% 
   mutate(mean_sd = map(data, 
-                     ~map_dfc(lst(mean, sd), 
+                     ~map_df(lst(mean, sd), 
                                function(.fun) .fun(.x$residential)))) %>% 
   unnest(mean_sd)
 test2
 
 
-#The code from peer review, does not seem to work for me
-
-mean_fun <- function(df)  #create summary function for all cols to be applied in lines 261-264
+#The code from peer review
+mean_fun <- function(df){
+   #create summary function for all cols to be applied in lines 261-264
   summarise_each(df, funs(mean(., na.rm = TRUE)))
+}
 
 m_d2 <- d2 %>%
-  as_tibble() %>% 
-  mutate(means = map(data, mean_fun)) %>% # applied mean_fun (line 257) to cells of all list
+  mutate(means = map(data, mean_fun)) %>% # applied mean_fun to cells of all list
   unnest(cols = means)
-m_d2
-d
 
+m_d2
+
+#more code from peer review, the means_test does not work  
+mean_numeric <- function(x) {
+  if(is.numeric(x)) {mean(x)}
+  else {return()}
+}
+
+means_test <- d2 %>%
+  mutate(means = map(d2$data, ~mean(data = .x))) %>% 
+  mutate(means = map(d2$data, ~mean_numeric(.x))) %>% 
+  select(-data) %>% 
+  unnest(means)
 
 ```
 
@@ -305,7 +321,7 @@ descriptives <- function(df, outcome, .fun = list(n = function(x) length(x),
                                              max = function(x) max(x, na.rm = TRUE))) {
 
  
-  df %>% 
+  df %>% select_if(is.numeric) %>% 
     summarise_at(vars({{outcome}}), 
                  .funs = .fun)
 }
@@ -313,15 +329,53 @@ descriptives <- function(df, outcome, .fun = list(n = function(x) length(x),
 
 #specify which variables to group by to get descriptives AND which variables you want descriptives for
 
-d %>% 
+des_d <- d %>% 
   group_by(country, week) %>% 
   descriptives(c(residential, workplaces))
 
-#this also works
+des_d
 
+#this also works
 descriptives(d, residential)
 
 
+```
+
+```{r}
+
+#from peer review 
+
+# a function to select df if it's numeric
+only_numeric <- function(df) {
+  select_numeric <- dplyr::select_if(df, is.numeric)
+  select_numeric
+}
+
+# a list with the functions you want
+smry <- list(mean = function(x) mean(x, na.rm = TRUE), 
+             sd = function(x) sd(x, na.rm = TRUE))
+
+# solution for one case. Dataframe, mtcars, is all numeric 
+map_df(mtcars, function(col) map_df(smry, ~.x(col)),
+       .id = "column")
+
+# wrapping solution in a function
+descriptives2 <- function(df) {
+  select_numeric <- only_numeric(df) 
+  mean_sd <- map_df(select_numeric, function(col) map_df(smry, ~.x(col)),
+       .id = "column")
+  mean_sd
+}
+descriptives2(iris)
+descriptives2(gss_cat)
+
+#works for overall mean & sd 
+descriptives2(d)
+
+#does not seem to work if attempt to group by country and week 
+des_d2 <- d %>% 
+  group_by(country, week) %>% 
+  descriptives2()
 
 ```
 
