@@ -261,8 +261,50 @@ Finally, we can generalize this further to loop through each cell in the data co
 
 ```{r}
 #Meeting w DA
-
+#1 call a single data frame to test a function on
 tmp <- d2[[3]][[1]]
+tmp
+#2 use map_lgl to get a numeric variables only
+tmp2 <- tmp[map_lgl(tmp, is.numeric)]
+tmp2
+
+#3 use map_dbl to get run a function (e.g. mean) on each num column within tmp
+map_dbl(tmp2, mean, na.rm = TRUE)
+
+#we can also use map_df
+map_df(tmp2, mean, na.rm = TRUE)
+
+#4 now we're ready to create a function that does all of the above
+# create a list of descriptive function that we'd lik to supply to our final function
+
+
+
+
+desc_df <- function(df, funs_to_apply = list(n = function(x) length(x),
+                                                     mean = function(x) mean(x, na.rm = TRUE),
+                                                     sd = function(x) sd(x, na.rm = TRUE),
+                                                     min = function(x) min(x, na.rm = TRUE),
+                                                     max = function(x) max(x, na.rm = TRUE))) {
+  
+  numeric_df <- df[map_lgl(df, is.numeric)] 
+  
+  #Method 1
+ # map_df(numeric_df, ~est_one_col(funs_to_apply, .x)) %>% 
+  #  mutate(column = names(numeric_df)) %>% 
+   #select(column, everything())
+  
+  #Method 2
+  map_df(funs_to_apply, ~est_one_fun(numeric_df, .x)) %>% 
+    mutate(column = names(numeric_df)) %>% 
+    select(column, everything())
+  
+  # Method 3
+  # map_df(funs_to_apply, function(f) map_dbl(numeric_df, function(column) f(column))) %>% 
+  #   mutate(column = names(numeric_df))
+  
+}
+
+desc_df(d)
 
 d2 %>%
   mutate(descrip = map(data, est_all_descrip)) %>% 
@@ -311,9 +353,9 @@ est_all_descrip <- function(df, funs_to_apply = list(n = function(x) length(x),
   #map_df(numeric_df, ~est_one_col(funs_to_apply, .x))
   
   # Method 2
-  map_df(funs_to_apply, ~est_one_fun(numeric_df, .x)) #%>% 
-   # mutate(column = names(numeric_df)) %>% 
-   # select(column, everything())
+  map_df(funs_to_apply, ~est_one_fun(numeric_df, .x)) %>% 
+    mutate(column = names(numeric_df)) %>% 
+    select(column, everything())
   
   # Method 3
   # map_df(funs_to_apply, function(f) map_dbl(numeric_df, function(column) f(column))) %>% 
@@ -324,6 +366,8 @@ est_all_descrip(tmp, mean)
 map_df(list(mn = mean, stdev = sd), ~est_one_fun(tmp[map_lgl(tmp, is.numeric)], .x))
 
 ```
+
+
 
 
 ```{r error = TRUE}
