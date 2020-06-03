@@ -100,12 +100,34 @@ files <- list.files(here::here("data"),
 d <- read_csv(files[1]) %>%
   clean_names()
 
-#consider changing width in code chunk to see whole table,
+#code from peer review
+#consider changing width in code chunk to see whole table
 reactable(d,  
-          height = 500,
+          columns = list(
+            country = colDef(name = "Country"),
+            date = colDef(name = "Date"),
+            grocery_pharmacy = colDef(name = "Grocery Pharmacy"),
+            parks = colDef(name = "Parks"),
+            residential = colDef(name = "Residential"),
+            retail_recreation = colDef(name = "Retail Recreation"),
+            transit_stations = colDef(name = "Transit Stations"),
+            workplaces = colDef(name = "Workplaces"),
+            total_cases = colDef(name = "Total Cases"),
+            fatalities = colDef(name = "Fatalities")
+          ),
+          height = 550,
           striped = TRUE, 
           compact = TRUE, 
-          outlined = TRUE)
+          outlined = TRUE,
+          searchable = TRUE)
+
+
+# our old code
+# reactable(d,  
+#           height = 500,
+#           striped = TRUE, 
+#           compact = TRUE, 
+#           outlined = TRUE)
 
 #gt not suitable here
 # library(gt)
@@ -153,7 +175,9 @@ If you are working with date-time variables in your data, the [lubridate]("https
 d <- d %>% 
   mutate(week = cut.Date(date, "week", start.on.monday = FALSE, labels = FALSE), 
          day_of_week = wday(date, label = TRUE))
-head(d)
+
+#taking a look at our new variables `week` and `day_of_week`
+d %>% select(country, date, week, day_of_week)
 
 ```
 
@@ -251,6 +275,21 @@ test2 <- d2 %>%
                                function(.fun) .fun(.x$residential)))) %>% 
   unnest(mean_sd)
 test2
+
+
+#The code from peer review, does not seem to work for me
+
+mean_fun <- function(df)  #create summary function for all cols to be applied in lines 261-264
+  summarise_each(df, funs(mean(., na.rm = TRUE)))
+
+m_d2 <- d2 %>%
+  as_tibble() %>% 
+  mutate(means = map(data, mean_fun)) %>% # applied mean_fun (line 257) to cells of all list
+  unnest(cols = means)
+m_d2
+d
+
+
 ```
 
 ## General Descriptives with Anonymous Function
