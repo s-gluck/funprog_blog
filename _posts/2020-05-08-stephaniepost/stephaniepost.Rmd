@@ -261,7 +261,7 @@ Finally, we can generalize this further to loop through each cell in the data co
 
 ```{r stephanie_DA_code}
 
-#SG: I tried to re-organize the codes after our meeting with Daniel. They all work, we'll just need to be able to describe them for our blog post. Also I found out Method2 and Method3 are the same, DA just assigned a nested function from Method3 into its own function in Method2. 
+#SG: I tried to re-organize the codes after our meeting with Daniel. They all work, we'll just need to be able to describe them for our blog post. Also I found out Method2 and Method3 are the same, DA just assigned a nested function from Method3 into its own function in Method2. There are slight differences in how the output looks between Method 1 & Method 2.  
 
 #Meeting w DA
 #1 call a single data frame to test a function on
