@@ -259,7 +259,119 @@ print(residential_mean)
 
 Finally, we can generalize this further to loop through each cell in the data column, to get the mean for each variable (not just residential).
 
-```{r}
+```{r stephanie_DA_code}
+
+#SG: I tried to re-organize the codes after our meeting with Daniel. They all work, we'll just need to be able to describe them for our blog post. Also I found out Method2 and Method3 are the same, DA just assigned a nested function from Method3 into its own function in Method2. 
+
+#Meeting w DA
+#1 call a single data frame to test a function on
+tmp <- d2[[3]][[1]]
+tmp
+
+#2 use map_lgl to get a numeric variables only
+tmp2 <- tmp[map_lgl(tmp, is.numeric)]
+tmp2
+
+#3 use map_dbl to run a function (e.g. mean) on each num column within tmp
+map_dbl(tmp2, mean, na.rm = TRUE)
+
+#we can also use map_df
+map_df(tmp2, mean, na.rm = TRUE)
+
+#4 now we're ready to create a function that does all of the above
+# create a list of descriptive function that we'd lik to supply to our final function
+
+listof_fun <- list(
+  n = function(x) length(x),
+  mean = function(x) mean(x, na.rm = TRUE),
+  sd = function(x) sd(x, na.rm = TRUE),
+  min = function(x) min(x, na.rm = TRUE),
+  max = function(x) max(x, na.rm = TRUE)
+  )
+
+# there are a couple of ways to go about returning despcritives looping through the nested list-column dataframe
+
+# METHOD 1 
+est_one_col <- function(funs, col) {
+ map_dbl(funs, function(f) f(col))
+}
+
+est_one_col(list(mean, sd), tmp$grocery_pharmacy)
+
+desc_df1 <- function(df, funs_to_apply = listof_fun) {
+  
+  numeric_df <- df[map_lgl(df, is.numeric)] #only select numeric values 
+
+  #Method 1
+  map_df(numeric_df, ~est_one_col(funs_to_apply, .x)) %>%
+    mutate(column = names(listof_fun)) %>%
+    select(column, everything())
+}
+
+#test on a single df
+desc_df1(tmp)
+
+#loop through our nested list-column df
+d2 %>%
+  mutate(descrip = map(data, desc_df1)) %>% 
+  select(-data) %>% 
+  unnest(descrip)
+
+
+# METHOD 2 - cleaner output 
+
+est_one_fun <- function(df, f) {
+ map_dbl(df, ~f(.x))
+}
+
+est_one_fun(tmp[map_lgl(tmp, is.numeric)], mean)
+
+
+desc_df2 <- function(df, funs_to_apply = listof_fun) {
+  
+  numeric_df <- df[map_lgl(df, is.numeric)] 
+
+  #Method 2
+  map_df(funs_to_apply, ~est_one_fun(numeric_df, .x)) %>% 
+    mutate(column = names(numeric_df)) %>% 
+    select(column, everything())
+}
+
+#test on a single df
+desc_df2(tmp)
+
+#loop through our nested list-column df
+d2 %>%
+  mutate(descrip = map(data, desc_df2)) %>% 
+  select(-data) %>% 
+  unnest(descrip)
+
+# METHOD 3 - same as method 2, but did not assign the nested function to its own function (method 2 `est_one_fun`)
+
+desc_df3 <- function(df, funs_to_apply = listof_fun) {
+  
+  numeric_df <- df[map_lgl(df, is.numeric)] 
+  # Method 3
+  map_df(funs_to_apply, function(f) map_dbl(numeric_df, function(column) f(column))) %>% 
+    mutate(column = names(numeric_df)) %>% 
+    select(column, everything())
+  
+}
+
+#test on a single df
+desc_df3(tmp)
+
+#loop through our nested list-column df
+d2 %>%
+  mutate(descrip = map(data, desc_df3)) %>% 
+  select(-data) %>% 
+  unnest(descrip)
+
+
+```
+
+
+```{r eval = FALSE, echo = FALSE}
 #Meeting w DA
 #1 call a single data frame to test a function on
 tmp <- d2[[3]][[1]]
