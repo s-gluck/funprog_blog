@@ -348,11 +348,17 @@ d2 %>%
 
 # METHOD 3 - same as method 2, but did not assign the nested function to its own function (method 2 `est_one_fun`)
 
-desc_df3 <- function(df, funs_to_apply = listof_fun) {
+#first assign a function
+##a) arguments are the dataframe (df) and the list of functions we created (here, we are naming it funs_to_apply, but you can name it anything you want (.funs)), 
+### b) we are going to use map_lgl like we did above to select only the numeric columns, and assign to a new object (numeric_df)
+### c) we're going to use map_df instead of map_dbl so our output is a data frame. the first map_Df is looping through each of the functions we created (renamed as funs_to_apply in #a), and then rather than specifying a pre-determined function like mean, we are creating our own function here --- map_dbl on our numeric df applies the function to each of these columns, 
+
+desc_df3 <- function(df, funs_to_apply = listof_fun) { #a
   
-  numeric_df <- df[map_lgl(df, is.numeric)] 
+  numeric_df <- df[map_lgl(df, is.numeric)] #b
   # Method 3
-  map_df(funs_to_apply, function(f) map_dbl(numeric_df, function(column) f(column))) %>% 
+  map_df(funs_to_apply, #c
+         function(f) map_dbl(numeric_df, function(col) f(col))) %>% #function(column) f(column) is going through each column and applying function
     mutate(column = names(numeric_df)) %>% 
     select(column, everything())
   
