@@ -1,7 +1,7 @@
 ---
-title: "Post 3"
+title: "Post 3 - How to use parallel iteration to create plots"
 description: |
-  A tutorial on how to use iteration and write a function to create plots. 
+  Examples of using pmap() to loop through your data and generate a series of plots.  
 author:
   - name: Joanna Wright
     url: https://s-gluck.github.io/funprog_blog
@@ -9,11 +9,13 @@ date: 06-01-2020
 output:
   distill::distill_article:
     self_contained: false
+    toc: true
+    toc_depth: 2
 ---
 
-This post describes examples of using iteration, parallel iteration, and writing functions in order to loop through a data set to extract information and create plots.
+This post describes examples of using iteration to loop through a data set and plot.
 
-## Set-up
+# Set-up
 
 ```{r setup }
 knitr::opts_chunk$set(echo = TRUE)
@@ -32,7 +34,9 @@ library(purrr)
 ```
 
 
-Loading the data. For details, see [Brock's post](link here).
+## Loading the data. 
+For details on how to load the data, see [Brock's post](https://s-gluck.github.io/funprog_blog/posts/2020-05-11-blog_post_one/).
+For details about this dataset, see [Akhila and Stephanie's post](https://s-gluck.github.io/funprog_blog/posts/2020-05-08-stephaniepost/)
 
 ```{r loading the data, results='hide'}
 
@@ -44,8 +48,9 @@ d <- read_csv(files[1]) %>%
 
 ```
 
-## Task 1: Plotting mobility trends by country 
+# Nesting and using `pmap()` for plotting 
 
+## Nesting
 Let's say we want to create a separate plot for mobility trends in each country.  First, we need to `group_by` country and `nest()` the rest of the data. This creates a list of tibbles, one for each country. I've called `head()` here so that we can see what the first few rows look like. 
 
 ```{r}
@@ -56,8 +61,19 @@ d %>%
   head()
 
 ```
+Now we can use this as the input for our plots.
 
-Now we can use this as the input for our plots. `pmap()` is a variation of `map()` which allows us to apply a function to multiple vectors simultaneously. In `pmap()`, the first vector listed corresponds to ..1 (in this case, country) and the second vector listed (data) corresponds to ..2. The vectors listed in `aes()` are from within the data, which we specifed with ..2. For this example, we'll create one plot for each country, for just one of the mobility categories - workplaces. 
+## pmap() and ggplot() for generating a series of plots
+
+### About `pmap()`: pmap(.l, .f, ...)
+`pmap()` is a variation of `map()` which allows us to apply a function to multiple vectors simultaneously. According to the [help documentation](https://purrr.tidyverse.org/reference/map2.html), it takes 2 or more arguments: 
+
+* .d = a list of vectors (such as a data frame).
+* .f = 	A function, formula, or vector (not necessarily atomic). *In the example below, we've supplied another vector.*
+* ... = Additional arguments passed on to the mapped function. **This is what makes `pmap()` so flexible!** 
+
+## Getting started with plotting 
+In the syntax  below, you'll see that the first vector listed corresponds to ..1 (in this case, country) and the second vector listed (data) corresponds to ..2. The vectors listed in `aes()` are from within the data, which we specifed with ..2. For this example, we'll create one plot for each country, for just one of the mobility categories (workplaces). 
 
 ```{r parallel iteration, workplaces mobility trends for each country}
 
@@ -72,25 +88,21 @@ plots_workplaces <- d %>%
 ```
 
 Test to see what the plots look like: 
+
 ```{r}
 
 plots_workplaces$plots[1]
 plots_workplaces$plots[2]
 
-```
-
-We could view all of them with: 
-
-```{r eval=FALSE}
-
-plots_workplaces$plots[1:19]
+# or we could view all of them like this: 
+# plots_workplaces$plots[1:19]
 
 ```
 
-Let's tidy up this plot a bit more.
-
+## Plot improvements and customization 
 Since we are using pmap, we can add a unique title to each plot with `{..1}` to select the 1st column (country) to insert country names into the title.
-A few other visualization adjustments... 
+
+Plus a few other visualization adjustments... 
 
 ```{r adding unique title to each plot with country name}
 
@@ -130,9 +142,10 @@ plots_workplaces$plots[2]
 # plots_workplaces$plots[1:19]
 ```
 
-So far, we've been able to create a plot for one mobility category and iterate this through all countries. But what if we wanted to quickly see mobility trends for each of the columns, not just workplaces?
+## Additional arguments to loop through data by country AND category 
+What if we wanted to see plots for all mobility categories, not just workplaces? We can apply the same logic as above, but first nest by both country and mobility category. 
 
-To do this, we need to nest as we did before, but this time by both country and mobility category. To do so, we first need to restructure the data so that we have a column for mobility category and a column for percent change: 
+In order to do so, we'll first have to restructure the data so that mobility category is it's own column. I've done this using `pivot_longer()`: 
 
 ```{r}
 
@@ -148,18 +161,15 @@ head(by_country_mobil_cat)
 
 ```
 
-Then, we can generalize our plot with a function, which we could then apply to any selection of mobility categories.  
-
-Our function will have 2 arguments: the data frame, and the mobility category of interest. The x-axis variable, date, will remain the same, so it is supplied in the body of the function rather than as an argument. 
+Now we can use the same code structure as before for plotting. `pmap` is super useful here because we can `list` any number of columns. Note that here the first argument for `ggplot()` is now `..3`, referring to the 3rd item ("data") in the `pmap(list())`. Also, the `aes()` now calls for perc_change instead of parks or residential, etc., because that is the name of our column after using pivot_longer. 
 
 ```{r}
 
-# Now generalize to a function: 
-create_plot <- function(df, outcome) {
-  call <- as.character(match.call())
-  ggplot(df, aes(date, {{outcome}})) +
+all_plots <- by_country_mobil_cat %>% 
+  mutate(plots = pmap(list(country, mobil_category, data),
+                      ~ggplot(..3, aes(date, perc_change)) +
       geom_line(color = "grey70") +
-      geom_point(aes(color = {{outcome}} > 0), 
+      geom_point(aes(color = perc_change > 0), 
                  size = 2) +
       scale_color_brewer(palette = "Set2") +      
       theme(axis.title.x = element_blank(), 
@@ -176,83 +186,44 @@ create_plot <- function(df, outcome) {
             axis.text.y  = element_text(hjust=1), 
             axis.title.y = element_text(color = "white"),
             plot.caption = element_text(color = "white")) +
-      labs(title = paste("Overall mobility trends in", call[3] ), 
-           x = "Date", 
-           y = "% change", 
-           caption = "Googlemaps data from https://www.kaggle.com/gustavomodelli/covid-community-measures")
-}
+      labs(title = glue("Mobility trends to/from {..2} in {..1}"), #unique title
+           y = "% change in mobility", 
+           caption = "Googlemaps data from https://www.kaggle.com/gustavomodelli/covid-community-measures"))
+    )
+
+all_plots$plots[1]
+all_plots$plots[10]
+all_plots$plots[20]
+
 
 ```
 
-Now let's loop through the data and apply our `create_plot()` function: 
+## Using `walk2()` to save plots 
+
+We can use walk2() to save our plots. It's very similar to map() but doesn't print anything to the screen, instead creates files and file pathways to save. 
 
 ```{r}
 
-plots_by_country_mobil_cat <- by_country_mobil_cat %>%
-  mutate(plots = pmap(list(country, mobil_category, data), 
-                      ~create_plot(df = by_country_mobil_cat, outcome = .x)))
+# add echo = FALSE here once finished!
 
-plots_by_country_mobil_cat$plots[[1]]
-
-# Q for DA: why is this not working? 
-```
-
-We can use walk() to save our plots. It's very similar to map() but doesn't print anything to the screen, instead creates files and file pathways to save. 
-
-```{r}
-
-# THIS SHOULD WORK AFTER I"VE SORTED OUOT THE PROBLEM ABOVE. 
-
-fs::dir_create(here::here("plots", "mobility-plots")) # creates a folder called "plots" and a subdirectory called "mobility"
+#fs::dir_create(here::here("plots", "mobility-plots")) # creates a folder called "plots" and a subdirectory called "mobility"
 
 # then create a vector that has all of the file paths: 
 
-files_c <- str_replace_all(tolower(plots_by_country_mobil_cat$country), " ", "-")
-files_m <- str_replace_all(plots_by_country_mobil_cat$mobil_category, "_", "-")
-paths <- here::here("plots", "mobility", glue("{files_c}-{files_m}.png"))
-paths
+#files_c <- str_replace_all(tolower(all_plots$country), " ", "-")
+#files_m <- str_replace_all(all_plots$mobil_category, "_", "-")
+#paths <- here::here("plots", "mobility", glue("{files_c}-{files_m}.png"))
+#paths
 
+# walk2(paths, all_plots$plots, ggsave,
+#      width = 9.5, 
+#      height = 6.5,
+#      dpi = 500)
 
-walk2(paths, plots_by_country_mobil_cat$plots, ggsave,
-      width = 9.5, 
-      height = 6.5,
-      dpi = 500)
-
-# Q for DA: difference between walk() and walk2()? 
-
-```
-
-## Task 2: How do infection rates relate to mobility trends, by country?
-
-Fitting a linear model to see how mobility changed as infection rate changed in each country: 
-
-```{r results="hide"}
-
-d1 <- d %>%
-  mutate(total_mob = rowSums(.[4:9]))
-
-lm_by_country_lists <- d1 %>% 
-  split(.$country) %>% # split into separate tbl for each country
-  map(~lm(total_mob ~ total_cases, data = .)) # for each, fit lm
-# Outputs a nested lis
+# Question for DA: Any idea why this is not working? The error I get is:  
+#Error in grDevices::dev.off() : QuartzBitmap_Output - unable to open file '/Users/joannawright/Desktop/EDLD 610 Spring 2020/funprog_blog/plots/mobility/argentina-grocery-pharmacy.png`
 
 ```
 
-Extracting slopes: 
 
-```{r }
-slopes <- lm_by_country_lists %>%
-    map(coef) %>%
-    map_dbl(2)
-slopes
-```
-
-Plotting lm for each country:
-
-```{r}
-
-# Q for DA: How to use what I've done thus far to plot?
-# Or scrap this bit entirely? 
-
-```
 

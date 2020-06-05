@@ -1,5 +1,20 @@
 [
   {
+    "path": "posts/2020-05-08-blog_post_3/",
+    "title": "Post 3 - How to use parallel iteration to create plots",
+    "description": "Examples of using pmap() to loop through your data and generate a series of plots.",
+    "author": [
+      {
+        "name": "Joanna Wright",
+        "url": "https://s-gluck.github.io/funprog_blog"
+      }
+    ],
+    "date": "2020-06-01",
+    "categories": [],
+    "preview": "posts/2020-05-08-blog_post_3/blog_post_3_files/figure-html5/unnamed-chunk-3-1.png",
+    "last_modified": "2020-06-04T18:01:11-07:00"
+  },
+  {
     "path": "posts/2020-05-08-stephaniepost/",
     "title": "Post 2 - How to Subset Data and Output Basic Descriptives",
     "description": "A tutorial on writing a function to group your data and generate basic descriptives.",
@@ -45,22 +60,6 @@
     "categories": [],
     "preview": {},
     "last_modified": "2020-05-08T10:59:11-07:00",
-    "input_file": {}
-  },
-  {
-    "path": "posts/2020-05-08-blog_post_3/",
-    "title": "joanna_post1",
-    "description": "Description here",
-    "author": [
-      {
-        "name": "Joanna Wright",
-        "url": "https://example.com/norajones"
-      }
-    ],
-    "date": "2020-05-08",
-    "categories": [],
-    "preview": {},
-    "last_modified": "2020-05-31T20:15:20-07:00",
     "input_file": {}
   },
   {
