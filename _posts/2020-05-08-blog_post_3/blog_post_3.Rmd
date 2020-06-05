@@ -34,9 +34,9 @@ library(purrr)
 ```
 
 
-## Loading the data. 
-For details on how to load the data, see [Brock's post](https://s-gluck.github.io/funprog_blog/posts/2020-05-11-blog_post_one/).
-For details about this dataset, see [Akhila and Stephanie's post](https://s-gluck.github.io/funprog_blog/posts/2020-05-08-stephaniepost/)
+## Loading the data 
+For details on how to load the data, see [Post #1 by Brock](https://s-gluck.github.io/funprog_blog/posts/2020-05-11-blog_post_one/).
+For details about this dataset, see [Post #2 by Akhila and Stephanie](https://s-gluck.github.io/funprog_blog/posts/2020-05-08-stephaniepost/)
 
 ```{r loading the data, results='hide'}
 
@@ -142,7 +142,7 @@ plots_workplaces$plots[2]
 # plots_workplaces$plots[1:19]
 ```
 
-## Additional arguments to loop through data by country AND category 
+# Another application of pmap() 
 What if we wanted to see plots for all mobility categories, not just workplaces? We can apply the same logic as above, but first nest by both country and mobility category. 
 
 In order to do so, we'll first have to restructure the data so that mobility category is it's own column. I've done this using `pivot_longer()`: 
@@ -198,7 +198,7 @@ all_plots$plots[20]
 
 ```
 
-## Using `walk2()` to save plots 
+# Using `walk2()` to save plots 
 
 We can use walk2() to save our plots. It's very similar to map() but doesn't print anything to the screen, instead creates files and file pathways to save. 
 

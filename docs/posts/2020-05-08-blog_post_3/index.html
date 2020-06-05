@@ -1317,17 +1317,16 @@ document.addEventListener('DOMContentLoaded', function() {
 <nav class="d-toc" id="TOC">
 <ul>
 <li><a href="#set-up">Set-up</a><ul>
-<li><a href="#libraries-for-this-post">Libraries for this post</a></li>
-<li><a href="#loading-the-data.">Loading the data.</a></li>
+<li><a href="#loading-the-data">Loading the data</a></li>
 </ul></li>
 <li><a href="#nesting-and-using-pmap-for-plotting">Nesting and using <code>pmap()</code> for plotting</a><ul>
 <li><a href="#nesting">Nesting</a></li>
 <li><a href="#pmap-and-ggplot-for-generating-a-series-of-plots">pmap() and ggplot() for generating a series of plots</a></li>
 <li><a href="#getting-started-with-plotting">Getting started with plotting</a></li>
 <li><a href="#plot-improvements-and-customization">Plot improvements and customization</a></li>
-<li><a href="#additional-arguments-to-loop-through-data-by-country-and-category">Additional arguments to loop through data by country AND category</a></li>
-<li><a href="#using-walk2-to-save-plots">Using <code>walk2()</code> to save plots</a></li>
 </ul></li>
+<li><a href="#another-application-of-pmap">Another application of pmap()</a></li>
+<li><a href="#using-walk2-to-save-plots">Using <code>walk2()</code> to save plots</a></li>
 </ul>
 </nav>
 <hr class="d-toc-separator"/>
@@ -1337,7 +1336,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </div>
 <aside>
-<h2 id="libraries-for-this-post">Libraries for this post</h2>
+Libraries for this post
 </aside>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
@@ -1347,8 +1346,8 @@ library(janitor)
 library(glue)
 library(purrr)</code></pre>
 </div>
-<h2 id="loading-the-data.">Loading the data.</h2>
-<p>For details on how to load the data, see <a href="https://s-gluck.github.io/funprog_blog/posts/2020-05-11-blog_post_one/">Brock’s post</a>. For details about this dataset, see <a href="https://s-gluck.github.io/funprog_blog/posts/2020-05-08-stephaniepost/">Akhila and Stephanie’s post</a></p>
+<h2 id="loading-the-data">Loading the data</h2>
+<p>For details on how to load the data, see <a href="https://s-gluck.github.io/funprog_blog/posts/2020-05-11-blog_post_one/">Post #1 by Brock</a>. For details about this dataset, see <a href="https://s-gluck.github.io/funprog_blog/posts/2020-05-08-stephaniepost/">Post #2 by Akhila and Stephanie</a></p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
 files &lt;- list.files(here::here(&quot;data&quot;),
@@ -1462,7 +1461,7 @@ plots_workplaces$plots[2]</code></pre>
 # or we could see all of them: 
 # plots_workplaces$plots[1:19]</code></pre>
 </div>
-<h2 id="additional-arguments-to-loop-through-data-by-country-and-category">Additional arguments to loop through data by country AND category</h2>
+<h1 id="another-application-of-pmap">Another application of pmap()</h1>
 <p>What if we wanted to see plots for all mobility categories, not just workplaces? We can apply the same logic as above, but first nest by both country and mobility category.</p>
 <p>In order to do so, we’ll first have to restructure the data so that mobility category is it’s own column. I’ve done this using <code>pivot_longer()</code>:</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -1531,7 +1530,7 @@ all_plots$plots[20]</code></pre>
 [[1]]</code></pre>
 <p><img src="blog_post_3_files/figure-html5/unnamed-chunk-5-3.png" width="624" /></p>
 </div>
-<h2 id="using-walk2-to-save-plots">Using <code>walk2()</code> to save plots</h2>
+<h1 id="using-walk2-to-save-plots">Using <code>walk2()</code> to save plots</h1>
 <p>We can use walk2() to save our plots. It’s very similar to map() but doesn’t print anything to the screen, instead creates files and file pathways to save.</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
