@@ -38,7 +38,7 @@ here::here()
 # create_setup(here::here("temporary-wd"))
 ```
 
-Now that we know the file pathway, this thing: "[1] "/Users/brockrowley/Phd in SPED/2020Spring/funprog_blog" we know where we are (root).
+Now that we know the file pathway, this thing: `"[1] "/Users/brockrowley/Phd in SPED/2020Spring/funprog_blog"` we know where we are (root).
 
 # Create a new directory here
 
@@ -69,6 +69,7 @@ In the code chunk above, we used "temporary-wd" as a placeholder for whatever yo
 The most common way to get data into R is to store it as a CSV. Drop your data file into the folder we created above called "data" and run the following code chunk to load your data.
 base R has a read_csv() command from readr. readr is part of the tidyverse, and read_csv() is fast.
 
+If you want to read in just one file, you'd do something like this:
 ```{r load_data, include = TRUE, echo = TRUE}
 files <- list.files(here::here("data"),
                     full.names = TRUE)
@@ -77,15 +78,13 @@ d <- read_csv(files[1]) %>%
   janitor::clean_names()
 ```
 
-# Data from a URL
+But, if you have a bunch of different files, and each is has the same column headers (e.g., files separated by grade), then you could do something like this:
 
-You can also read a CSV file straight from the Internet via a URL. CSVs should have the file extension .csv.
-
-```{r load_url, include = TRUE, echo = TRUE}
-#url <- "https://www.putyourcoolurl/linktofile/here/download.csv"
-#covid_data <- read_csv(url)
-#View(covid_data)
+```{r batch-load}
+d <- map_df(files, read_csv, .id = "file")
 ```
+
+In the above code chunk the .id keeps this information from the file name in the first column, as file names often have useful information about the data (e.g., grade level or content area and such).
 
 # Saving your data to folder
 
@@ -95,7 +94,7 @@ To write a data frame to a CSV, use the write_csv() function. By default, the fi
 #write_csv(data, path = "cool_name.csv")
 ```
 
-The following code chunk is here to delete the temporary working directory (temporary-wd) used to show how the function works.
+<!--  The following code chunk is here to delete the temporary working directory (temporary-wd) used to show how the function works. -->
 
 ```{r last-chunk, echo = FALSE}
 fs::dir_delete(here::here("temporary-wd"))
