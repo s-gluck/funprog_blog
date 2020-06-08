@@ -11,6 +11,7 @@ output:
     self_contained: false
     toc: true
     toc_depth: 2
+    highlight: zenburn
 ---
 
 ```{r setup, include= FALSE}
@@ -352,6 +353,13 @@ descriptives2 <- function(df, funs_to_apply = list(
                                                max = function(x) max(x, na.rm = TRUE)
   )) {
   
+  if(!typeof(funs_to_apply) == "list") {
+    funs_to_apply <- list(funs_to_apply)
+  }
+  if(is.null(names(funs_to_apply))) {
+    names(funs_to_apply) <- paste0("f", seq_along(funs_to_apply))
+  }
+  
   numeric_df <- df[map_lgl(df, is.numeric)] 
 
   map_df(funs_to_apply, ~est_one_fun(numeric_df, .x)) %>% 
@@ -359,8 +367,11 @@ descriptives2 <- function(df, funs_to_apply = list(
     select(place, everything())
 }
 
+descriptives2(tmp2, sd)
 
-
+map_dbl(list(mean), ~est_one_fun(tmp2, .x))
+est_one_fun(tmp2, mean)
+is.null(names(list(mean, sd)))
 ##create new list  of funs to test
 funlist <- list(
   n = function(x) length(x),
