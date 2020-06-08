@@ -1,8 +1,8 @@
 [
   {
     "path": "posts/2020-05-08-blog_post_3/",
-    "title": "Post 3 - How to use parallel iteration to create plots",
-    "description": "Examples of using pmap() to loop through your data and generate a series of plots.",
+    "title": "Post 3 - Using parellel iteration and writing functions to generate plots",
+    "description": "Examples of using pmap() and map() to loop through the data set to create plots, plus one example of writing a function that plots linear models.",
     "author": [
       {
         "name": "Joanna Wright",
@@ -12,7 +12,7 @@
     "date": "2020-06-01",
     "categories": [],
     "preview": "posts/2020-05-08-blog_post_3/blog_post_3_files/figure-html5/unnamed-chunk-3-1.png",
-    "last_modified": "2020-06-04T18:07:33-07:00"
+    "last_modified": "2020-06-07T17:08:49-07:00"
   },
   {
     "path": "posts/2020-05-08-stephaniepost/",
