@@ -1,7 +1,7 @@
 ---
-title: "Post 3 - How to use parallel iteration to create plots"
+title: "Post 3 - Using parellel iteration and writing functions to generate plots"
 description: |
-  Examples of using pmap() to loop through your data and generate a series of plots.  
+  Examples of using pmap() and map() to loop through the data set to create plots, plus one example of writing a function that plots linear models.  
 author:
   - name: Joanna Wright
     url: https://s-gluck.github.io/funprog_blog
@@ -12,8 +12,6 @@ output:
     toc: true
     toc_depth: 2
 ---
-
-This post describes examples of using iteration to loop through a data set and plot.
 
 # Set-up
 
@@ -229,10 +227,17 @@ So far, we've only explored mobility trends, not mobility trends in relation to 
 
 Before writing a function, it's usually helpful to just write the code that you would normally use to achieve the result you want. Here is the code for plotting a linear model:  
 
+(first I unnested the data)
+
 ```{r}
 
 d_unnest <- by_country_mobil_cat %>%
   unnest(data)
+
+```
+
+
+```{r}
 
 lm_total_mob <- lm(perc_change ~ total_cases, data = d_unnest)
 call <- as.character(match.call()) # for customized title in labs() 
