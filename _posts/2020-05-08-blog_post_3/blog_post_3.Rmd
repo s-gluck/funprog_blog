@@ -223,4 +223,65 @@ walk2(paths, all_plots$plots, ggsave,
 ```
 
 
+# Creating a function to plot linear model
+
+So far, we've only explored mobility trends, not mobility trends in relation to infections. And, we've illustrated one strategy for applying a function to multiple vectors - parellel iteration. Another strategy that is especially useful for processes that you find yourself repeating is to write a function yourself! Here's an example of writing a function to plot linear models of mobility trends by infection data. 
+
+Before writing a function, it's usually helpful to just write the code that you would normally use to achieve the result you want. Here is the code for plotting a linear model:  
+
+```{r}
+
+d_unnest <- by_country_mobil_cat %>%
+  unnest(data)
+
+lm_total_mob <- lm(perc_change ~ total_cases, data = d_unnest)
+call <- as.character(match.call()) # for customized title in labs() 
+plot(perc_change ~ total_cases, data = d_unnest)
+abline(lm_total_mob)
+
+```
+
+Now let's use that code to generalize it to a function. This function will have 3 arguments: 
+
+* the data frame (df)
+* the mobility category of interest (mobil_cat), e.g. parks, residential
+* the infection variable of interest (infect_var), e.g. total_cases, fatalities
+
+Here's the function: 
+
+```{r}
+
+plot_lm <- function(df, mobil_cat, infect_var) {
+  lm_mob_by_infect <- lm(mobil_cat ~ infect_var, data = df)
+  plot(mobil_cat ~ infect_var, data = df)
+  abline(lm_mob_by_infect)
+}
+
+```
+
+Test `plot_lm()` on one mobility category (parks):
+
+```{r}
+
+plot_lm(d, d$parks, d$total_cases)
+
+```
+
+# Using map() to loop through our plot_lm() function 
+
+We can use map() to loop through each mobilility category column to plot a lm for each.
+
+map(.d, .f) takes a dataframe argument and a function argument. 
+
+Here, the ~ means "apply this function" and is paired with the .x argument indicating "over all columns". For the data argument in map(), I've selected only the columns I want to loop through: d[5:9]. 
+
+```{r results='hide', fig.keep='all'}
+
+map(d[5:9], ~plot_lm(d, .x, d$total_cases))
+
+```
+
+This is just to demonstrate creating a function and using map() with ~ and .x to loop through that function. Of course, these plots would be more useful with customized title and axes labels, as shown above. 
+
+Interesting to see how different the 2nd plot is from the rest! This plot corresponds to "residential" mobility -- while the other plots show decreasing mobility to parks, workplaces, etc., this plot shows a large increase in people staying at home as total infections rose.   
 
