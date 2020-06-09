@@ -45,10 +45,9 @@ Now that we know the file pathway, this thing: `"[1] "/Users/brockrowley/Phd in 
 We want to keep all our data, analyses, and text in one, self-contained, single folder, called the working directory. We will use the `fs package` to do this work for us.
 
 ```{r setting_up_directory, include = TRUE, echo = TRUE}
-# Create a (temporary in blog) directory with ecco = FALSE for blog but, ecco = TRUE for output to blog
+
 fs::dir_create(here::here("temporary-wd"))
 
-# Write a function that (basically) does this below: 
 usethis::proj_activate(here::here("temporary-wd"))
 
 create_setup <- function(dir = getwd()) {
@@ -70,6 +69,7 @@ The most common way to get data into R is to store it as a CSV. Drop your data f
 base R has a `read_csv()` command from readr. readr is part of the tidyverse, and `read_csv()` is fast.
 
 If you want to read in just one file, you'd do something like this:
+
 ```{r load_data, include = TRUE, echo = TRUE}
 files <- list.files(here::here("data"),
                     full.names = TRUE)
@@ -80,7 +80,7 @@ d <- read_csv(files[1]) %>%
 
 But, if you have a bunch of different files, and each file has the same column headers (e.g., files separated by grade), then you could do something like this:
 
-```{r batch-load}
+```{r batch-load, include = TRUE, echo = TRUE}
 d <- map_df(files, read_csv, .id = "file")
 ```
 
@@ -93,6 +93,8 @@ To write a data frame to a CSV, use the `write_csv()` function. By default, the 
 ```{r write_data, include = TRUE, echo = TRUE}
 #write_csv(data, path = "cool_name.csv")
 ```
+
+You just remove the hashtag (#) from the `#write_csv` and put the name of your .csv data to be saved where it says `"cool_name.csv"`
 
 <!--  The following code chunk is here to delete the temporary working directory (temporary-wd) used to show how the function works. -->
 
