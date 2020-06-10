@@ -25,46 +25,6 @@ library(reactable)
 
 ```
 
-# Project Notes
-### This section will be deleted or moved for final version
-
-To create a new page on your blog 
-`distill::create_post("post_title")`
-
-To tackle the outline: 
-
-1) Set up a working directory complete with an Rproject and subfolders - Brock
- 
-2) Subsetting data and outputting basic descriptives - Akhila & Stephanie 
-  - Custom functions for means and standard deviation
-  - Rename Akhila's first post - Dataset Descriptives Tutorial
-  - Idea: Subset by week (function to separate dates by incrememnts of 7), location, and country, to get average activity per week in each location.
-
-3) Loop through regression/other stats models to extract plots - Joanna
-
-4) Creating folders to export plots with meaningful paramters (e.g., names, plot dimensions) - Akhila & Stephanie 
-
-Data:
-https://www.kaggle.com/gustavomodelli/covid-community-measures
-
-More info about the data: 
-https://support.google.com/covid19-mobility/answer/9824897?hl=en&ref_topic=9822927
-
-**Class Requirement**
-No code is used repetitively (no more than twice) [10 points]
-
-More than one variant of purrr::map is used [10 points]
-
-At least one {purrr} function outside the basic map family (walk_*, reduce, modify_*, etc.) [10 points]
-
-At least one instance of parallel iteration (e.g., map2_*, pmap_*) [10 points]
-
-At least one use case of purrr::nest %>% mutate() [10 points]
-
-At least two custom functions [20 points; 10 points each]
-   - Each function must do exactly one thing
-   - The functions may replicate the behavior of a base function - as noted above this is about practicing the skills you learn in class
-
 
 
 # Introduction 
@@ -90,9 +50,9 @@ library(purrr)
 ```
 
 
-Once the data is loaded, we can look at the dataframe by using `reactable()`. Notice that you can sort each column by clicking on the column header.
+Once the data is loaded, we can look at the dataframe by calling `reactable()` on our dataframe. Notice that you can sort each column by clicking on the column header.
 
-```{r, echo = FALSE}
+```{r reactable, echo = FALSE, layout="l-body-outset"}
 
 files <- list.files(here::here("data"),
                     full.names = TRUE)
@@ -100,8 +60,6 @@ files <- list.files(here::here("data"),
 d <- read_csv(files[1]) %>%
   clean_names()
 
-#code from peer review
-#consider changing width in code chunk to see whole table
 reactable(d,  
           columns = list(
             country = colDef(name = "Country"),
@@ -121,17 +79,6 @@ reactable(d,
           outlined = TRUE,
           searchable = TRUE)
 
-
-# our old code
-# reactable(d,  
-#           height = 500,
-#           striped = TRUE, 
-#           compact = TRUE, 
-#           outlined = TRUE)
-
-#gt not suitable here
-# library(gt)
-# gt(d)
 
 ```
 
@@ -158,13 +105,13 @@ d %>%
 
 # Function Tutorial 
 
-## Subsetting Data 
+## Subset Data 
 
-For this dataset, it would be helpful to create a 'week' variable that extracts each day of the week, so we can group our descriptives by week which would allow us to examine for example the average change in activities across weeks for different settings. Here, we've also created a 'day_of_week'variable to double-check our work. 
+For this dataset, it would be helpful to create a 'week' variable that extracts each day of the week, so we can group our descriptives by week which would allow us to examine for example the average change in activities across weeks for different settings. Here, we've also created a 'day_of_week' variable to double-check our work. 
 
 If you are working with date-time variables in your data, the [lubridate]("https://lubridate.tidyverse.org/) package is quite powerful at manipulating date-time data. 
 
-```{r echo = TRUE}
+```{r cut_date, echo = TRUE}
 #cut.Date, labels = TRUE will print actual day of the week, e.g., Sunday (1)
 
 #use lubridate wday and base R cut.Date
@@ -186,7 +133,7 @@ Now that we've created our week variable, we can use `tidyr::nest` to group our 
 
 We will nest our data by the variables `country` and `week` 
 
-```{r}
+```{r nest}
 #week 7 only has one day  -- filter out here if it becomes a problem
 
 d2 <- d %>%
@@ -197,7 +144,7 @@ print(d2)
 
 ```
 
-After nesting, you see that our new dataframe now contains a list-column named `data`. We can call the Argentina Week 1 data tibble to look at it in more details. 
+After nesting, you see that our new dataframe now contains a list-column named `data`. We can call the Argentina Week 1 data tibble by specifying `d2$data[[1]]` to look at it in more details. 
 
 ```{r}
 
@@ -205,31 +152,32 @@ d2$data[[1]]
 
 ```
 
-You can see that inside the 7 x 11 tibble for Argentina week 1, the community activities, diagnosis and fatalities data from that week (week of February 23 to February 29, 2020) are listed. 
+You can see that inside the 7 x 11 tibble for Argentina week 1, the community activities, diagnosis, and fatalities data from that week (week of February 23 to February 29, 2020) are listed. 
 
-We can also perform other functions to check our nested dataframe
+We can also perform other functions to check our nested dataframe:
 
 ```{r}
-#checking how length of variables
+#checking length of variables
 map_dbl(d2$data, nrow)
 
 map_dbl(d2$data, ncol)
 
-#if you want to find the mean for just one specif column, by each country and week. Here we look at the mean for residential for each country across all 7 weeks. 
+#if you want to find the mean for just one specific column, by each country and week. 
+#Here we look at the mean for residential for each country across all 7 weeks. 
 avg <- map_dbl(d2$data, ~mean(.x$residential))
 avg
 
+#if we want to create a country name and week index
 index <- d2 %>% select(country, week)
 index
 
-test <- tibble(index, `residential avg` = avg)
-test
+#we can create a tibble of our index with our residential average data
+avg_tibble <- tibble(index, `residential mean` = avg)
+avg_tibble
 
 ```
 
-## General Descriptives with purrr:map
-
-### The functions we have so far are not ideal - need to be cleaned up to be generalized across all numeric columns in a dataset
+## Descriptives with purrr:map and Custom Function
 
 In order to figure out how to create a function that can be used for any variable in a dataset, we first need to do it for one. 
 
@@ -257,29 +205,48 @@ print(residential_mean)
 ```
 
 
-Finally, we can generalize this further to loop through each cell in the data column, to get the mean for each variable (not just residential).
+Finally, we can generalize this further to loop through each cell in the data column, to get the mean for each variable in the data frame (not just residential).
 
-```{r stephanie_DA_code}
+1. First, as with any function, we will attempt to create it for just one data frame. Let's call the contents of the first dataset (Argentina Week1) in our nested list-column data frame `d2`. 
 
-#SG: I tried to re-organize the codes after our meeting with Daniel. They all work, we'll just need to be able to describe them for our blog post. Also I found out Method2 and Method3 are the same, DA just assigned a nested function from Method3 into its own function in Method2. There are slight differences in how the output looks between Method 1 & Method 2.  
+```{r}
 
-#Meeting w DA
-#1 call a single data frame to test a function on
 tmp <- d2[[3]][[1]]
 tmp
+```
 
-#2 use map_lgl to get a numeric variables only
+2. Now you'll notice that some of the columns are not numeric. So we will create a second temporary dataset that calls only the numeric columns by using `map_lgl`. 
+
+```{r}
+
+#map_lgl will first return a TRUE/FALSE of whether a column is numeric
+map_lgl(tmp, is.numeric)
+
+#Can use map_lgl to subset our tmp data for only the numeric columns
 tmp2 <- tmp[map_lgl(tmp, is.numeric)]
 tmp2
 
-#3 use map_dbl to run a function (e.g. mean) on each num column within tmp
+```
+
+3. Okay, so now that we have a dataframe with only numeric columns. Let's write a function that gives us just the mean for each column, using `map_dbl` or `map_df`.
+
+```{r}
+
+#map_dbl - returns a vector 
 map_dbl(tmp2, mean, na.rm = TRUE)
 
-#we can also use map_df
+#map_df - returns a data frame
 map_df(tmp2, mean, na.rm = TRUE)
 
-#4 now we're ready to create a function that does all of the above
-# create a list of descriptive function that we'd lik to supply to our final function
+```
+
+4. Now we're ready to create a function that does all of the above, for each column! 
+
+Let's start by creating a list of all the operations that we will later supply to our function to run with our dataset. We will call the list `funs_to_apply`. Here, we are specifying that we want the total `n` for each column, the `mean`, standard deviation `sd`, `min`, and `max`.
+
+Remember, if you want to create a function that you can share with members of your team, you should not assign this list to an object. Instead you can input the list directly into the function, as you'll see at the very end of this post. 
+
+```{r}
 
 listof_fun <- list(
   n = function(x) length(x),
@@ -289,322 +256,196 @@ listof_fun <- list(
   max = function(x) max(x, na.rm = TRUE)
   )
 
-# there are a couple of ways to go about returning despcritives looping through the nested list-column dataframe
 
-# METHOD 1 
-est_one_col <- function(funs, col) {
- map_dbl(funs, function(f) f(col))
-}
-
-est_one_col(list(mean, sd), tmp$grocery_pharmacy)
-
-desc_df1 <- function(df, funs_to_apply = listof_fun) {
-  
-  numeric_df <- df[map_lgl(df, is.numeric)] #only select numeric values 
-
-  #Method 1
-  map_df(numeric_df, ~est_one_col(funs_to_apply, .x)) %>%
-    mutate(column = names(listof_fun)) %>%
-    select(column, everything())
-}
-
-#test on a single df
-desc_df1(tmp)
-
-#loop through our nested list-column df
-d2 %>%
-  mutate(descrip = map(data, desc_df1)) %>% 
-  select(-data) %>% 
-  unnest(descrip)
-
-
-# METHOD 2 - cleaner output 
-
-est_one_fun <- function(df, f) {
- map_dbl(df, ~f(.x))
-}
-
-est_one_fun(tmp[map_lgl(tmp, is.numeric)], mean)
-
-
-desc_df2 <- function(df, funs_to_apply = listof_fun) {
-  
-  numeric_df <- df[map_lgl(df, is.numeric)] 
-
-  #Method 2
-  map_df(funs_to_apply, ~est_one_fun(numeric_df, .x)) %>% 
-    mutate(column = names(numeric_df)) %>% 
-    select(column, everything())
-}
-
-#test on a single df
-desc_df2(tmp)
-
-#loop through our nested list-column df
-d2 %>%
-  mutate(descrip = map(data, desc_df2)) %>% 
-  select(-data) %>% 
-  unnest(descrip)
-
-# METHOD 3 - same as method 2, but did not assign the nested function to its own function (method 2 `est_one_fun`)
-
-#first assign a function
-##a) arguments are the dataframe (df) and the list of functions we created (here, we are naming it funs_to_apply, but you can name it anything you want (.funs)), 
-### b) we are going to use map_lgl like we did above to select only the numeric columns, and assign to a new object (numeric_df)
-### c) we're going to use map_df instead of map_dbl so our output is a data frame. the first map_Df is looping through each of the functions we created (renamed as funs_to_apply in #a), and then rather than specifying a pre-determined function like mean, we are creating our own function here --- map_dbl on our numeric df applies the function to each of these columns, 
-
-desc_df3 <- function(df, funs_to_apply = listof_fun) { #a
-  
-  numeric_df <- df[map_lgl(df, is.numeric)] #b
-  # Method 3
-  map_df(funs_to_apply, #c
-         function(f) map_dbl(numeric_df, function(col) f(col))) %>% #function(column) f(column) is going through each column and applying function
-    mutate(column = names(numeric_df)) %>% 
-    select(column, everything())
-  
-}
-
-#test on a single df
-desc_df3(tmp)
-
-#loop through our nested list-column df
-d2 %>%
-  mutate(descrip = map(data, desc_df3)) %>% 
-  select(-data) %>% 
-  unnest(descrip)
 
 
 ```
 
+5. Let's take the functions we wrote in steps 2 and 3. We can change the object names to make them more descriptive. Above we used `tmp` because that was the specific dataset we were interested in making numeric. Now we can generalize to any dataset by replacing `tmp` with `df`: 
 
-```{r eval = FALSE, echo = FALSE}
-#Meeting w DA
-#1 call a single data frame to test a function on
-tmp <- d2[[3]][[1]]
-tmp
-#2 use map_lgl to get a numeric variables only
-tmp2 <- tmp[map_lgl(tmp, is.numeric)]
-tmp2
+`numeric_df <- df[map_lgl(df, is.numeric)]`
 
-#3 use map_dbl to get run a function (e.g. mean) on each num column within tmp
-map_dbl(tmp2, mean, na.rm = TRUE)
+Here, we are using `df`; once we put this mini-function into our larger function, `df` will refer to all the datasets within our nested dataframe (`d2`). (This will make more sense later) 
 
-#we can also use map_df
-map_df(tmp2, mean, na.rm = TRUE)
-
-#4 now we're ready to create a function that does all of the above
-# create a list of descriptive function that we'd lik to supply to our final function
-
-
-
-
-desc_df <- function(df, funs_to_apply = list(n = function(x) length(x),
-                                                     mean = function(x) mean(x, na.rm = TRUE),
-                                                     sd = function(x) sd(x, na.rm = TRUE),
-                                                     min = function(x) min(x, na.rm = TRUE),
-                                                     max = function(x) max(x, na.rm = TRUE))) {
-  
-  numeric_df <- df[map_lgl(df, is.numeric)] 
-  
-  #Method 1
- # map_df(numeric_df, ~est_one_col(funs_to_apply, .x)) %>% 
-  #  mutate(column = names(numeric_df)) %>% 
-   #select(column, everything())
-  
-  #Method 2
-  map_df(funs_to_apply, ~est_one_fun(numeric_df, .x)) %>% 
-    mutate(column = names(numeric_df)) %>% 
-    select(column, everything())
-  
-  # Method 3
-  # map_df(funs_to_apply, function(f) map_dbl(numeric_df, function(column) f(column))) %>% 
-  #   mutate(column = names(numeric_df))
-  
-}
-
-desc_df(d)
-
-d2 %>%
-  mutate(descrip = map(data, est_all_descrip)) %>% 
-  select(-data) %>% 
-  unnest(descrip)
-
-descrips_df <- function(df, funs_to_apply = list(n = function(x) length(x),
-                                                     mean = function(x) mean(x, na.rm = TRUE),
-                                                     sd = function(x) sd(x, na.rm = TRUE),
-                                                     min = function(x) min(x, na.rm = TRUE),
-                                                     max = function(x) max(x, na.rm = TRUE))) {
-  df %>%
-    mutate(descrip = map(data, est_all_descrip, funs_to_apply)) %>% 
-    select(-data) %>% 
-    unnest(descrip)
-}
-
-descrips_df(d2, mean)
-
-tmp2
-
-tibble(variable = names(tmp2),
-       mean = map_dbl(tmp2, mean, na.rm = TRUE),
-       sd   = map_dbl(tmp2, sd, na.rm = TRUE))
-
-est_one_col <- function(funs, col) {
- map_dbl(funs, function(f) f(col))
-}
-
-est_one_fun <- function(df, f) {
- map_dbl(df, ~f(.x))
-}
-
-est_one_col(list(mean, max), tmp$grocery_pharmacy)
-est_one_fun(tmp[map_lgl(tmp, is.numeric)], mean)
-
-est_all_descrip <- function(df, funs_to_apply = list(n = function(x) length(x),
-                                                     mean = function(x) mean(x, na.rm = TRUE),
-                                                     sd = function(x) sd(x, na.rm = TRUE),
-                                                     min = function(x) min(x, na.rm = TRUE),
-                                                     max = function(x) max(x, na.rm = TRUE))) {
-  
-  numeric_df <- df[map_lgl(df, is.numeric)]
-  
-  # Method 1
-  #map_df(numeric_df, ~est_one_col(funs_to_apply, .x))
-  
-  # Method 2
-  map_df(funs_to_apply, ~est_one_fun(numeric_df, .x)) %>% 
-    mutate(column = names(numeric_df)) %>% 
-    select(column, everything())
-  
-  # Method 3
-  # map_df(funs_to_apply, function(f) map_dbl(numeric_df, function(column) f(column))) %>% 
-  #   mutate(column = names(numeric_df))
-  
-}
-est_all_descrip(tmp, mean)
-map_df(list(mn = mean, stdev = sd), ~est_one_fun(tmp[map_lgl(tmp, is.numeric)], .x))
-
-```
-
-
-
-
-```{r error = TRUE}
-
-####Feedback would be appreciated about how to use map to loop through each numeric column within the nested data (d2)
-
-means_c_w <- d2 %>%
-  mutate(means = map(d2$data, ~mean(data = .x))) %>% 
-  select(-data) %>% 
-  unnest(means)
-
-#this works at returning the mean for all numeric variable, but is not pretty and also loses the labels for country
-test <- d2$data %>% map(~ map_dbl(.x, mean))
-test[[1]]
-
-
-#this only works for mean of a specific variable in the nested list (e.g., residential)
-#can't get it to generalize across all the different settings 
-test2 <- d2 %>% 
-  mutate(mean_sd = map(data, 
-                     ~map_df(lst(mean, sd), 
-                               function(.fun) .fun(.x$residential)))) %>% 
-  unnest(mean_sd)
-test2
-
-
-#The code from peer review
-mean_fun <- function(df){
-   #create summary function for all cols to be applied in lines 261-264
-  summarise_each(df, funs(mean(., na.rm = TRUE)))
-}
-
-m_d2 <- d2 %>%
-  mutate(means = map(data, mean_fun)) %>% # applied mean_fun to cells of all list
-  unnest(cols = means)
-
-m_d2
-
-#more code from peer review, the means_test does not work  
-mean_numeric <- function(x) {
-  if(is.numeric(x)) {mean(x)}
-  else {return()}
-}
-
-means_test <- d2 %>%
-  mutate(means = map(d2$data, ~mean(data = .x))) %>% 
-  mutate(means = map(d2$data, ~mean_numeric(.x))) %>% 
-  select(-data) %>% 
-  unnest(means)
-
-```
-
-## General Descriptives with Custom Function
-
-```{r, eval = TRUE, echo = TRUE}
-
-
-
-descriptives <- function(df, outcome, .fun = list(n = function(x) length(x),
-                                             mean = function(x) mean(x, na.rm = TRUE),
-                                             sd = function(x) sd(x, na.rm = TRUE),
-                                             min = function(x) min(x, na.rm = TRUE),
-                                             max = function(x) max(x, na.rm = TRUE))) {
-
- 
-  df %>% select_if(is.numeric) %>% 
-    summarise_at(vars({{outcome}}), 
-                 .funs = .fun)
-}
-
-
-#specify which variables to group by to get descriptives AND which variables you want descriptives for
-
-des_d <- d %>% 
-  group_by(country, week) %>% 
-  descriptives(c(residential, workplaces))
-
-des_d
-
-#this also works
-descriptives(d, residential)
-
-```
+Next, we've broadened the function from step 3 so that it can take any dataframe and function as an input, and loop that function throughout the dataset. 
 
 ```{r}
 
-#from peer review 
-
-# a function to select df if it's numeric
-only_numeric <- function(df) {
-  select_numeric <- dplyr::select_if(df, is.numeric)
-  select_numeric
+#estimating just one function
+est_one_fun <- function(df, f) {
+ map_dbl(df, ~f(.x))
 }
-
-# a list with the functions you want
-smry <- list(mean = function(x) mean(x, na.rm = TRUE), 
-             sd = function(x) sd(x, na.rm = TRUE))
-
-# solution for one case. Dataframe, mtcars, is all numeric 
-map_df(mtcars, function(col) map_df(smry, ~.x(col)),
-       .id = "column")
-
-# wrapping solution in a function
-descriptives2 <- function(df) {
-  select_numeric <- only_numeric(df) 
-  mean_sd <- map_df(select_numeric, function(col) map_df(smry, ~.x(col)),
-       .id = "column")
-  mean_sd
-}
-descriptives2(iris)
-descriptives2(gss_cat)
-
-#works for overall mean & sd 
-descriptives2(d)
-
-#does not seem to work if attempt to group by country and week 
-des_d2 <- d %>% 
-  group_by(country, week) %>% 
-  descriptives2()
 
 ```
 
+6. Almost there! Now let's create our larger function. We'll assign it to the name `descriptives`. Our arguments are:
+
+* `df` = placeholder for a dataframe.
+
+* `funs_to_apply` = a list of functions. We can call this anything. Here we are saying that the list of functions we want is what we created earlier, `listof_fun`.
+
+
+```{r eval=FALSE}
+
+descriptives <- function(df, funs_to_apply = listof_fun) {
+  
+
+```
+
+7. Great, now let's add in the `numeric_df` function we created in step 5. 
+
+```{r eval=FALSE}
+
+descriptives <- function(df, funs_to_apply = listof_fun) {
+  
+  numeric_df <- df[map_lgl(df, is.numeric)] 
+
+
+```
+
+8. Now comes the tricky part. We will use `map_df` AND our `est_one_fun` function within our `descriptives` function. Let's focus just on this for now. We are saying: loop through each of our operations in `funs_to_apply`, so that we can apply the `est_one_fun` function to use each of those operations on our `numeric_df`.
+
+
+```{r eval=FALSE}
+
+#descriptives <- function(df, funs_to_apply = listof_fun) {
+  
+#  numeric_df <- df[map_lgl(df, is.numeric)] 
+
+  map_df(funs_to_apply, ~est_one_fun(numeric_df, .x)) 
+
+```
+
+9. Phew! Now let's use a bit of `dplyr` code to make our output look nicer. We are using `mutate` to create a vector with each of the column names. Then we are using `select` to change the order of the output so that our names column (`place`) is first.
+
+```{r}
+
+descriptives <- function(df, funs_to_apply = listof_fun) {
+  
+  numeric_df <- df[map_lgl(df, is.numeric)] 
+
+  map_df(funs_to_apply, ~est_one_fun(numeric_df, .x)) %>% 
+    mutate(place = names(numeric_df)) %>% 
+    select(place, everything())
+}
+
+```
+
+
+10. Before we celebrate...let's test it! First, on a single dataframe. We can use the one we created in step 1.
+
+```{r}
+
+descriptives(tmp)
+
+```
+
+11. It works!! But can we make it work with our nested dataframe? We'll have to use map again, so that we can loop our `descriptives` function to each element of our list. Let's pipe everything to `d2` and create a new column called `Output` that contains the output from our function. 
+
+```{r}
+
+Descriptive_output <- d2 %>%
+  mutate(Output = map(data, descriptives)) %>% 
+  select(-data)               %>% 
+  unnest(Output)
+
+```
+
+Note, we are using `data` within `map` because everything is piped to `d2`. Next, we deselect `data` and unnest so that all we see is our output, country, and week.
+
+
+## WOOHOO!! WE DID IT.
+
+### Now let's take a look at some extra perks. 
+
+1. If you want to create a function that you can share with your team without requiring them to create extra objects (e.g., `listof_fun`), you can input the list directly into the function like below:
+
+
+```{r, eval = TRUE}
+
+
+descriptives2 <- function(df, funs_to_apply = list(
+                                               n = function(x) length(x),
+                                               mean = function(x) mean(x, na.rm = TRUE),
+                                               sd = function(x) sd(x, na.rm = TRUE),
+                                               min = function(x) min(x, na.rm = TRUE),
+                                               max = function(x) max(x, na.rm = TRUE)
+  )) {
+  
+  numeric_df <- df[map_lgl(df, is.numeric)] 
+
+  map_df(funs_to_apply, ~est_one_fun(numeric_df, .x)) %>% 
+    mutate(place = names(numeric_df)) %>% 
+    select(place, everything())
+}
+
+
+descriptives2(tmp2, sd)
+
+map_dbl(list(mean), ~est_one_fun(tmp2, .x))
+est_one_fun(tmp2, mean)
+is.null(names(list(mean, sd)))
+##create new list  of funs to test
+funlist <- list(
+  n = function(x) length(x),
+  mean = function(x) mean(x, na.rm = TRUE),
+  sd = function(x) sd(x, na.rm = TRUE))
+
+
+#test - works!
+descriptives2(tmp, funs_to_apply = funlist)
+
+#test
+descriptives2(tmp, funs_to_apply = list(mean=mean, sd=sd))
+
+
+
+```
+
+
+```{r, eval = TRUE}
+
+
+descriptives2 <- function(df, funs_to_apply = list(
+                                               n = function(x) length(x),
+                                               mean = function(x) mean(x, na.rm = TRUE),
+                                               sd = function(x) sd(x, na.rm = TRUE),
+                                               min = function(x) min(x, na.rm = TRUE),
+                                               max = function(x) max(x, na.rm = TRUE)
+  )) {
+  
+  if(!typeof(funs_to_apply) == "list") {
+    funs_to_apply <- list(funs_to_apply)
+  }
+  if(is.null(names(funs_to_apply))) {
+    names(funs_to_apply) <- paste0("f", seq_along(funs_to_apply))
+  }
+  
+  numeric_df <- df[map_lgl(df, is.numeric)] 
+
+  map_df(funs_to_apply, ~est_one_fun(numeric_df, .x)) %>% 
+    mutate(place = names(numeric_df)) %>% 
+    select(place, everything())
+}
+
+descriptives2(tmp2, sd)
+
+map_dbl(list(mean), ~est_one_fun(tmp2, .x))
+est_one_fun(tmp2, mean)
+is.null(names(list(mean, sd)))
+##create new list  of funs to test
+funlist <- list(
+  n = function(x) length(x),
+  mean = function(x) mean(x, na.rm = TRUE),
+  sd = function(x) sd(x, na.rm = TRUE))
+
+
+#test - works!
+descriptives2(tmp, funs_to_apply = funlist)
+
+#test
+descriptives2(tmp, funs_to_apply = list(mean=mean, sd=sd))
+
+
+
+```

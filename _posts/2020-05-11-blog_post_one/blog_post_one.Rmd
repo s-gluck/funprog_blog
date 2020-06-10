@@ -1,7 +1,7 @@
 ---
 title: "GettingStarted_Post"
 description: |
-  We are getting started with setting up a project, working directory, subfolders, and loading data.
+  Getting started with setting up a project, working directory, subfolders, and loading data.
 author:
   - name: Brock Rowley
     url: https://example.com/norajones
@@ -28,9 +28,9 @@ Choose New Directory, then New Project.
 Enter a name for this new folder (or “directory”), and choose a convenient location for it. This will be your working directory for the project (e.g., ~ /funprog_blog).  
 Click on Create Project.
 
-# Using the here function to help with file pathways
+# Using the `here()` function to help with file pathways
 
-Let's start this time by figuring out one of the most difficult aspects of learning to code initially... where are we?? OR... where does my computer think we are pointed? file pathways are difficult to navigate, keep straight and understand when you first begin to code. We will use the here() function so the results in our path are always relative to our projects root directory. First understand where we are.
+Let's start this time by figuring out one of the most difficult aspects of learning to code initially... where are we?? OR... where does my computer think we are pointed? File pathways are difficult to navigate, keep straight and understand when you first begin to code. We will use the `here()` function so the results in our path are always relative to our projects root directory. First understand where we are.
 
 ```{r directory_locate_here, include = TRUE, echo = TRUE}
 here::here()
@@ -42,13 +42,12 @@ Now that we know the file pathway, this thing: `"[1] "/Users/brockrowley/Phd in 
 
 # Create a new directory here
 
-We want to keep all our data, analyses, and text in one, self-contained, single folder, called the working directory. We will use the fs package to do this work for us.
+We want to keep all our data, analyses, and text in one, self-contained, single folder, called the working directory. We will use the `fs package` to do this work for us.
 
 ```{r setting_up_directory, include = TRUE, echo = TRUE}
-# Create a (temporary in blog) directory with ecco = FALSE for blog but, ecco = TRUE for output to blog
+
 fs::dir_create(here::here("temporary-wd"))
 
-# Write a function that (basically) does this below: 
 usethis::proj_activate(here::here("temporary-wd"))
 
 create_setup <- function(dir = getwd()) {
@@ -67,9 +66,10 @@ In the code chunk above, we used "temporary-wd" as a placeholder for whatever yo
 
 # Data from a CSV
 The most common way to get data into R is to store it as a CSV. Drop your data file into the folder we created above called "data" and run the following code chunk to load your data.
-base R has a read_csv() command from readr. readr is part of the tidyverse, and read_csv() is fast.
+base R has a `read_csv()` command from readr. readr is part of the tidyverse, and `read_csv()` is fast.
 
 If you want to read in just one file, you'd do something like this:
+
 ```{r load_data, include = TRUE, echo = TRUE}
 files <- list.files(here::here("data"),
                     full.names = TRUE)
@@ -78,21 +78,23 @@ d <- read_csv(files[1]) %>%
   janitor::clean_names()
 ```
 
-But, if you have a bunch of different files, and each is has the same column headers (e.g., files separated by grade), then you could do something like this:
+But, if you have a bunch of different files, and each file has the same column headers (e.g., files separated by grade), then you could do something like this:
 
-```{r batch-load}
+```{r batch-load, include = TRUE, echo = TRUE}
 d <- map_df(files, read_csv, .id = "file")
 ```
 
-In the above code chunk the .id keeps this information from the file name in the first column, as file names often have useful information about the data (e.g., grade level or content area and such).
+In the above code chunk the `.id` keeps the information from the file name in the first column, as file names often have useful information about the data (e.g., grade level or content area and such).
 
 # Saving your data to folder
 
-To write a data frame to a CSV, use the write_csv() function. By default, the file will be written to the working directory.
+To write a data frame to a CSV, use the `write_csv()` function. By default, the file will be written to the working directory.
 
 ```{r write_data, include = TRUE, echo = TRUE}
 #write_csv(data, path = "cool_name.csv")
 ```
+
+You just remove the hashtag (#) from the `#write_csv` and put the name of your .csv data to be saved where it says `"cool_name.csv"`
 
 <!--  The following code chunk is here to delete the temporary working directory (temporary-wd) used to show how the function works. -->
 

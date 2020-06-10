@@ -11,8 +11,14 @@
     ],
     "date": "2020-06-01",
     "categories": [],
+<<<<<<< HEAD
     "preview": "posts/2020-05-08-blog_post_3/blog_post_3_files/figure-html5/unnamed-chunk-5-1.png",
     "last_modified": "2020-06-10T09:48:36-07:00"
+=======
+    "preview": "posts/2020-05-08-blog_post_3/blog_post_3_files/figure-html5/unnamed-chunk-3-1.png",
+    "last_modified": "2020-06-08T09:10:24-07:00",
+    "input_file": {}
+>>>>>>> master
   },
   {
     "path": "posts/2020-05-08-stephaniepost/",
@@ -27,13 +33,13 @@
     "date": "2020-05-23",
     "categories": [],
     "preview": {},
-    "last_modified": "2020-06-03T22:44:44-07:00",
+    "last_modified": "2020-06-10T09:48:57-07:00",
     "input_file": "stephaniepost.utf8.md"
   },
   {
     "path": "posts/2020-05-11-blog_post_one/",
     "title": "GettingStarted_Post",
-    "description": "We are getting started with setting up a project, working directory, subfolders, and loading data.",
+    "description": "Getting started with setting up a project, working directory, subfolders, and loading data.",
     "author": [
       {
         "name": "Brock Rowley",
@@ -43,23 +49,7 @@
     "date": "2020-05-11",
     "categories": [],
     "preview": {},
-    "last_modified": "2020-05-31T20:15:20-07:00",
-    "input_file": {}
-  },
-  {
-    "path": "posts/2020-05-08-akhilas-first-post/",
-    "title": "Akhila's First Post",
-    "description": "A short description of the post.",
-    "author": [
-      {
-        "name": "Akhila Nekkanti",
-        "url": "https://example.com/norajones"
-      }
-    ],
-    "date": "2020-05-08",
-    "categories": [],
-    "preview": {},
-    "last_modified": "2020-05-08T10:59:11-07:00",
+    "last_modified": "2020-06-09T17:24:35-07:00",
     "input_file": {}
   },
   {

@@ -21,7 +21,7 @@
   <!--radix_placeholder_meta_tags-->
 <title>Functional Programming Blog: GettingStarted_Post</title>
 
-<meta property="description" itemprop="description" content="We are getting started with setting up a project, working directory, subfolders, and loading data."/>
+<meta property="description" itemprop="description" content="Getting started with setting up a project, working directory, subfolders, and loading data."/>
 
 
 <!--  https://schema.org/Article -->
@@ -32,25 +32,25 @@
 <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
 <meta property="og:title" content="Functional Programming Blog: GettingStarted_Post"/>
 <meta property="og:type" content="article"/>
-<meta property="og:description" content="We are getting started with setting up a project, working directory, subfolders, and loading data."/>
+<meta property="og:description" content="Getting started with setting up a project, working directory, subfolders, and loading data."/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="Functional Programming Blog"/>
 
 <!--  https://dev.twitter.com/cards/types/summary -->
 <meta property="twitter:card" content="summary"/>
 <meta property="twitter:title" content="Functional Programming Blog: GettingStarted_Post"/>
-<meta property="twitter:description" content="We are getting started with setting up a project, working directory, subfolders, and loading data."/>
+<meta property="twitter:description" content="Getting started with setting up a project, working directory, subfolders, and loading data."/>
 
 <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["GettingStarted_Post"]},{"type":"character","attributes":{},"value":["We are getting started with setting up a project, working directory, subfolders, and loading data."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Brock Rowley"]},{"type":"character","attributes":{},"value":["https://example.com/norajones"]}]}]},{"type":"character","attributes":{},"value":["05-11-2020"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["GettingStarted_Post"]},{"type":"character","attributes":{},"value":["Getting started with setting up a project, working directory, subfolders, and loading data."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Brock Rowley"]},{"type":"character","attributes":{},"value":["https://example.com/norajones"]}]}]},{"type":"character","attributes":{},"value":["05-11-2020"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["rowleypost_files/bowser-1.9.3/bowser.min.js","rowleypost_files/distill-2.2.21/template.v2.js","rowleypost_files/jquery-1.11.3/jquery.min.js","rowleypost_files/webcomponents-2.0.0/webcomponents.js","rowleypost.html"]}
+  {"type":"character","attributes":{},"value":["blog_post_one_files/bowser-1.9.3/bowser.min.js","blog_post_one_files/distill-2.2.21/template.v2.js","blog_post_one_files/jquery-1.11.3/jquery.min.js","blog_post_one_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 
@@ -1270,6 +1270,145 @@ document.addEventListener('DOMContentLoaded', function() {
   <script src="../../site_libs/webcomponents-2.0.0/webcomponents.js"></script>
   <script src="../../site_libs/distill-2.2.21/template.v2.js"></script>
   <!--radix_placeholder_site_in_header-->
+<style type="text/css">
+.distill-site-nav {
+  color: #E8D2B9;
+  background-color: #541F12; 
+  font-size: 15px;
+  font-weight: 300;
+}
+
+code {
+  background-color: #4f8dde;
+}
+
+pre code {
+  display: block;
+  border-left: 2px solid rgba(0, 0, 0, .1);
+  padding: 0 0 0 36px;
+  background-color: #4f8dde;
+}
+
+code {
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 2px;
+  padding: 4px 7px;
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+pre code {
+  display: block;
+  border-left: 2px solid rgba(0, 0, 0, .1);
+  padding: 0 0 0 36px;
+}
+
+code[class*="language-"], pre[class*="language-"] {
+  color: black;
+	background: #4f8dde;
+	background-color: #4f8dde;
+	text-shadow: 0 1px white;
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection, code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+  text-shadow: none;
+	background: #b3d4fc;
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection, code[class*="language-"]::selection, code[class*="language-"] ::selection {
+  text-shadow: none;
+	background: #b3d4fc;
+}
+
+@media print {
+code[class*="language-"], pre[class*="language-"] {
+  text-shadow: none;
+}
+
+}
+
+pre[class*="language-"] {
+  padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+}
+
+:not(pre) > code[class*="language-"], pre[class*="language-"] {
+  background: #f5f2f0;
+}
+
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment, .token.prolog, .token.doctype, .token.cdata {
+  color: slategray;
+}
+
+.token.punctuation {
+  color: #999;
+}
+
+.namespace {
+  opacity: .7;
+}
+
+.token.property, .token.tag, .token.boolean, .token.number, .token.constant, .token.symbol, .token.deleted {
+  color: #905;
+}
+
+.token.selector, .token.attr-name, .token.string, .token.char, .token.builtin, .token.inserted {
+  color: #690;
+}
+
+.token.operator, .token.entity, .token.url, .language-css .token.string, .style .token.string {
+  color: #a67f59;
+	background: hsla(0, 0%, 100%, .5);
+}
+
+.token.atrule, .token.attr-value, .token.keyword {
+  color: #07a;
+}
+
+.token.function {
+  color: #4f8dde;
+}
+
+.token.regex, .token.important, .token.variable {
+  color: #e90;
+}
+
+.token.important, .token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+.token.entity {
+  cursor: help;
+}
+</style>
 <!--/radix_placeholder_site_in_header-->
 
 
@@ -1280,7 +1419,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"GettingStarted_Post","description":"We are getting started with setting up a project, working directory, subfolders, and loading data.","authors":[{"author":"Brock Rowley","authorURL":"https://example.com/norajones","affiliation":"&nbsp;","affiliationURL":"#"}],"publishedDate":"2020-05-11T00:00:00.000-07:00","citationText":"Rowley, 2020"}
+{"title":"GettingStarted_Post","description":"Getting started with setting up a project, working directory, subfolders, and loading data.","authors":[{"author":"Brock Rowley","authorURL":"https://example.com/norajones","affiliation":"&nbsp;","affiliationURL":"#"}],"publishedDate":"2020-05-11T00:00:00.000-07:00","citationText":"Rowley, 2020"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1303,7 +1442,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <div class="d-title">
 <h1>GettingStarted_Post</h1>
-<p>We are getting started with setting up a project, working directory, subfolders, and loading data.</p>
+<p>Getting started with setting up a project, working directory, subfolders, and loading data.</p>
 </div>
 
 <div class="d-byline">
@@ -1321,8 +1460,8 @@ Under the File menu, click on New Project.<br />
 Choose New Directory, then New Project.<br />
 Enter a name for this new folder (or “directory”), and choose a convenient location for it. This will be your working directory for the project (e.g., ~ /funprog_blog).<br />
 Click on Create Project.</p>
-<h1 id="using-the-here-function-to-help-with-file-pathways">Using the here function to help with file pathways</h1>
-<p>Let’s start this time by figuring out one of the most difficult aspects of learning to code initially… where are we?? OR… where does my computer think we are pointed? file pathways are difficult to navigate, keep straight and understand when you first begin to code. We will use the here() function so the results in our path are always relative to our projects root directory. First understand where we are.</p>
+<h1 id="using-the-here-function-to-help-with-file-pathways">Using the <code>here()</code> function to help with file pathways</h1>
+<p>Let’s start this time by figuring out one of the most difficult aspects of learning to code initially… where are we?? OR… where does my computer think we are pointed? File pathways are difficult to navigate, keep straight and understand when you first begin to code. We will use the <code>here()</code> function so the results in our path are always relative to our projects root directory. First understand where we are.</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
 here::here()</code></pre>
@@ -1332,15 +1471,13 @@ here::here()</code></pre>
 # create_setup(here::here())
 # create_setup(here::here(&quot;temporary-wd&quot;))</code></pre>
 </div>
-<p>Now that we know the file pathway, this thing: “[1]”/Users/brockrowley/Phd in SPED/2020Spring/funprog_blog&quot; we know where we are (root).</p>
+<p>Now that we know the file pathway, this thing: <code>&quot;[1] &quot;/Users/brockrowley/Phd in SPED/2020Spring/funprog_blog&quot;</code> we know where we are (root).</p>
 <h1 id="create-a-new-directory-here">Create a new directory here</h1>
-<p>We want to keep all our data, analyses, and text in one, self-contained, single folder, called the working directory. We will use the fs package to do this work for us.</p>
+<p>We want to keep all our data, analyses, and text in one, self-contained, single folder, called the working directory. We will use the <code>fs package</code> to do this work for us.</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
-# Create a (temporary in blog) directory with ecco = FALSE for blog but, ecco = TRUE for output to blog
 fs::dir_create(here::here(&quot;temporary-wd&quot;))
 
-# Write a function that (basically) does this below: 
 usethis::proj_activate(here::here(&quot;temporary-wd&quot;))</code></pre>
 <pre><code>
 ✔ Changing working directory to &#39;/Users/brockrowley/Phd in SPED/2020Spring/funprog_blog/temporary-wd/&#39;
@@ -1359,7 +1496,8 @@ create_setup(here::here(&quot;temporary-wd&quot;))</code></pre>
 </div>
 <p>In the code chunk above, we used “temporary-wd” as a placeholder for whatever you want to call your project. If you replace “temporary-wd” with whatever you want to call your project, you will create a new RStudio project, complete with three new folders inside (data, scripts, plots) to get started.</p>
 <h1 id="data-from-a-csv">Data from a CSV</h1>
-<p>The most common way to get data into R is to store it as a CSV. Drop your data file into the folder we created above called “data” and run the following code chunk to load your data. base R has a read_csv() command from readr. readr is part of the tidyverse, and read_csv() is fast.</p>
+<p>The most common way to get data into R is to store it as a CSV. Drop your data file into the folder we created above called “data” and run the following code chunk to load your data. base R has a <code>read_csv()</code> command from readr. readr is part of the tidyverse, and <code>read_csv()</code> is fast.</p>
+<p>If you want to read in just one file, you’d do something like this:</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
 files &lt;- list.files(here::here(&quot;data&quot;),
@@ -1368,21 +1506,20 @@ files &lt;- list.files(here::here(&quot;data&quot;),
 d &lt;- read_csv(files[1]) %&gt;%
   janitor::clean_names()</code></pre>
 </div>
-<h1 id="data-from-a-url">Data from a URL</h1>
-<p>You can also read a CSV file straight from the Internet via a URL. CSVs should have the file extension .csv.</p>
+<p>But, if you have a bunch of different files, and each file has the same column headers (e.g., files separated by grade), then you could do something like this:</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
-#url &lt;- &quot;https://www.putyourcoolurl/linktofile/here/download.csv&quot;
-#covid_data &lt;- read_csv(url)
-#View(covid_data)</code></pre>
+d &lt;- map_df(files, read_csv, .id = &quot;file&quot;)</code></pre>
 </div>
+<p>In the above code chunk the <code>.id</code> keeps the information from the file name in the first column, as file names often have useful information about the data (e.g., grade level or content area and such).</p>
 <h1 id="saving-your-data-to-folder">Saving your data to folder</h1>
-<p>To write a data frame to a CSV, use the write_csv() function. By default, the file will be written to the working directory.</p>
+<p>To write a data frame to a CSV, use the <code>write_csv()</code> function. By default, the file will be written to the working directory.</p>
 <div class="layout-chunk" data-layout="l-body">
 <pre class="r"><code>
 #write_csv(data, path = &quot;cool_name.csv&quot;)</code></pre>
 </div>
-<p>The following code chunk is here to delete the temporary working directory (temporary-wd) used to show how the function works.</p>
+<p>You just remove the hashtag (#) from the <code>#write_csv</code> and put the name of your .csv data to be saved where it says <code>&quot;cool_name.csv&quot;</code></p>
+<!--  The following code chunk is here to delete the temporary working directory (temporary-wd) used to show how the function works. -->
 <div class="layout-chunk" data-layout="l-body">
 
 </div>
