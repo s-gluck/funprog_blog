@@ -5,7 +5,7 @@ description: |
 author:
   - name: Stephanie Gluck & Akhila Nekkanti
     url: https://s-gluck.github.io/funprog_blog
-date: 05-23-2020
+date: 06-08-2020
 output:
   distill::distill_article:
     self_contained: false
@@ -24,6 +24,7 @@ library(purrr)
 library(reactable)
 
 ```
+
 
 
 # Introduction 
@@ -243,6 +244,8 @@ map_df(tmp2, mean, na.rm = TRUE)
 
 Let's start by creating a list of all the operations that we will later supply to our function to run with our dataset. We will call the list `funs_to_apply`. Here, we are specifying that we want the total `n` for each column, the `mean`, standard deviation `sd`, `min`, and `max`.
 
+Remember, if you want to create a function that you can share with members of your team, you should not assign this list to an object. Instead you can input the list directly into the function, as you'll see at the very end of this post. 
+
 ```{r}
 
 listof_fun <- list(
@@ -254,16 +257,7 @@ listof_fun <- list(
   )
 
 
-#note we are using `=` here instead of `<-` 
-#because we are building up our function one step at a time
 
-funs_to_apply = list(
-  n = function(x) length(x),
-  mean = function(x) mean(x, na.rm = TRUE),
-  sd = function(x) sd(x, na.rm = TRUE),
-  min = function(x) min(x, na.rm = TRUE),
-  max = function(x) max(x, na.rm = TRUE)
-  )
 
 ```
 
@@ -311,6 +305,7 @@ descriptives <- function(df, funs_to_apply = listof_fun) {
 
 8. Now comes the tricky part. We will use `map_df` AND our `est_one_fun` function within our `descriptives` function. Let's focus just on this for now. We are saying: loop through each of our operations in `funs_to_apply`, so that we can apply the `est_one_fun` function to use each of those operations on our `numeric_df`.
 
+
 ```{r eval=FALSE}
 
 #descriptives <- function(df, funs_to_apply = listof_fun) {
@@ -346,11 +341,12 @@ descriptives(tmp)
 ```
 
 11. It works!! But can we make it work with our nested dataframe? We'll have to use map again, so that we can loop our `descriptives` function to each element of our list. Let's pipe everything to `d2` and create a new column called `Output` that contains the output from our function. 
+
 ```{r}
 
 Descriptive_output <- d2 %>%
   mutate(Output = map(data, descriptives)) %>% 
-  select(-data) %>% 
+  select(-data)               %>% 
   unnest(Output)
 
 ```
@@ -359,6 +355,53 @@ Note, we are using `data` within `map` because everything is piped to `d2`. Next
 
 
 ## WOOHOO!! WE DID IT.
+
+### Now let's take a look at some extra perks. 
+
+1. If you want to create a function that you can share with your team without requiring them to create extra objects (e.g., `listof_fun`), you can input the list directly into the function like below:
+
+
+```{r, eval = FALSE}
+
+
+descriptives2 <- function(df, funs_to_apply = list(
+                                               n = function(x) length(x),
+                                               mean = function(x) mean(x, na.rm = TRUE),
+                                               sd = function(x) sd(x, na.rm = TRUE),
+                                               min = function(x) min(x, na.rm = TRUE),
+                                               max = function(x) max(x, na.rm = TRUE)
+  )) {
+  
+  numeric_df <- df[map_lgl(df, is.numeric)] 
+
+  map_df(funs_to_apply, ~est_one_fun(numeric_df, .x)) %>% 
+    mutate(place = names(numeric_df)) %>% 
+    select(place, everything())
+}
+
+
+descriptives2(tmp2, sd)
+
+map_dbl(list(mean), ~est_one_fun(tmp2, .x))
+est_one_fun(tmp2, mean)
+is.null(names(list(mean, sd)))
+##create new list  of funs to test
+funlist <- list(
+  n = function(x) length(x),
+  mean = function(x) mean(x, na.rm = TRUE),
+  sd = function(x) sd(x, na.rm = TRUE))
+
+
+#test - works!
+descriptives2(tmp, funs_to_apply = funlist)
+
+#test
+descriptives2(tmp, funs_to_apply = list(mean=mean, sd=sd))
+
+
+
+```
+
 
 ```{r, eval = FALSE}
 
@@ -403,8 +446,6 @@ descriptives2(tmp, funs_to_apply = funlist)
 #test
 descriptives2(tmp, funs_to_apply = list(mean=mean, sd=sd))
 
-#test with a function
+
 
 ```
-
-

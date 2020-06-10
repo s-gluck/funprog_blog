@@ -5,7 +5,7 @@ description: |
 author:
   - name: Joanna Wright
     url: https://s-gluck.github.io/funprog_blog
-date: 06-01-2020
+date: 06-07-2020
 output:
   distill::distill_article:
     self_contained: false
