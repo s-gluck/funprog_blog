@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [
   {
     "path": "posts/2020-05-08-blog_post_3/",
@@ -69,3 +70,71 @@
     "input_file": {}
   }
 ]
+=======
+[
+  {
+    "path": "posts/welcome/",
+    "title": "Welcome to Functional Programming Blog",
+    "description": "Welcome to our class project blog",
+    "author": [
+      {
+        "name": "SG, AK, BR, JW",
+        "url": "https://s-gluck.github.io/funprog_blog"
+      }
+    ],
+    "date": "2020-06-10",
+    "categories": [],
+    "preview": {},
+    "last_modified": "2020-06-10T10:31:02-07:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2020-05-11-blog_post_one/",
+    "title": "Post 1 - Getting Started and Loading Data",
+    "description": "Getting started with setting up a project, working directory, subfolders, and loading data.",
+    "author": [
+      {
+        "name": "Brock Rowley",
+        "url": "https://s-gluck.github.io/funprog_blog"
+      }
+    ],
+    "date": "2020-06-09",
+    "categories": [],
+    "preview": {},
+    "last_modified": "2020-06-10T10:30:49-07:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2020-05-08-blog_post_2/",
+    "title": "Post 2 - How to Subset Data and Output Basic Descriptives",
+    "description": "A tutorial on writing a function to group your data and generate basic descriptives.",
+    "author": [
+      {
+        "name": "Stephanie Gluck & Akhila Nekkanti",
+        "url": "https://s-gluck.github.io/funprog_blog"
+      }
+    ],
+    "date": "2020-06-08",
+    "categories": [],
+    "preview": {},
+    "last_modified": "2020-06-10T10:32:31-07:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2020-05-08-blog_post_3/",
+    "title": "Post 3 - Using parellel iteration and writing functions to generate plots",
+    "description": "Examples of using pmap() and map() to loop through the data set to create plots, plus one example of writing a function that plots linear models.",
+    "author": [
+      {
+        "name": "Joanna Wright",
+        "url": "https://s-gluck.github.io/funprog_blog"
+      }
+    ],
+    "date": "2020-06-07",
+    "categories": [],
+    "preview": "posts/2020-05-08-blog_post_3/blog_post_3_files/figure-html5/unnamed-chunk-3-1.png",
+    "last_modified": "2020-06-10T10:31:18-07:00",
+    "input_file": {}
+  }
+]
+>>>>>>> master
