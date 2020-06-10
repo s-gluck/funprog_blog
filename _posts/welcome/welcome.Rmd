@@ -7,7 +7,7 @@ author:
     url: https://s-gluck.github.io/funprog_blog
     affiliation: University of Oregon
     affiliation_url: https://uoregon.edu
-date: 05-08-2020
+date: 06-10-2020
 output:
   distill::distill_article:
     self_contained: false
@@ -15,9 +15,6 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-
-# Learn more about creating blogs with Distill at:
-# https://rstudio.github.io/distill/blog.html
 
 ```
 
@@ -37,12 +34,19 @@ The authors of the blog are:
 
 
 
-### The following blog post contain guides related to writing function: 
+### The following blog post contain guides related to iteration and writing functions: 
 
 SG: add link once finalized and authors please edit. 
 
-1) To setup your porject and load data, by Brock Rowley
+1) To setup your project and load data, by Brock Rowley
 
 2) To to subset data and output basic descriptives, by Stephanie Gluck and Akhila Nekkanti
 
 3) To visualize your data, by Joanna Wright
+
+### About the Data 
+
+For the tutorial, we will use the [COVID Community Measures](https://www.kaggle.com/gustavomodelli/covid-community-measures) dataset from Kaggle. We hope that you will be able to generalize the function we covered to be applicable to your own dataset. The current dataset contains Community Mobility Reports describing community activities in a variety of settings from Google and the incidence of COVID-19 diagnosis and fatalities from John Hopkins CSSE. 
+
+Community activity is defined as the change in activity from the baseline days. A baseline day is the median value from the 5‑week period between January 3rd to February 6th, 2020. 
+

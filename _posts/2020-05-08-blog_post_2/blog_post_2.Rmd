@@ -5,7 +5,7 @@ description: |
 author:
   - name: Stephanie Gluck & Akhila Nekkanti
     url: https://s-gluck.github.io/funprog_blog
-date: 05-23-2020
+date: 06-08-2020
 output:
   distill::distill_article:
     self_contained: false
@@ -361,7 +361,7 @@ Note, we are using `data` within `map` because everything is piped to `d2`. Next
 1. If you want to create a function that you can share with your team without requiring them to create extra objects (e.g., `listof_fun`), you can input the list directly into the function like below:
 
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 
 
 descriptives2 <- function(df, funs_to_apply = list(
@@ -403,7 +403,7 @@ descriptives2(tmp, funs_to_apply = list(mean=mean, sd=sd))
 ```
 
 
-```{r, eval = TRUE}
+```{r, eval = FALSE}
 
 
 descriptives2 <- function(df, funs_to_apply = list(
