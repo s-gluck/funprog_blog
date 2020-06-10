@@ -9,6 +9,8 @@ date: 05-11-2020
 output:
   distill::distill_article:
     self_contained: false
+    toc: true
+    toc_depth: 2
 ---
 
 ```{r setup, include=FALSE}
@@ -18,7 +20,11 @@ library(here)
 library(usethis)
 ```
 
-## We will set up a working directory, complete with an Rproject and subfolders. We will show you how to load your data and save your data.
+We will set up a working directory, complete with an Rproject and subfolders. We will show you how to load your data and save your data.
+
+For details about this dataset, see [Post #2 by Akhila and Stephanie](https://s-gluck.github.io/funprog_blog/posts/2020-05-08-stephaniepost/).
+
+For details about Using parellel iteration and writing functions to generate plots, see [Post #3 by Joanna] (https://s-gluck.github.io/funprog_blog/posts/2020-05-blog_post_3/)
 
 # The typical way to get set up:
 You are probibly framilar with this process as a typical way to start any RStudio project. The process goes something like this:  
@@ -40,7 +46,7 @@ here::here()
 
 Now that we know the file pathway, this thing: `"[1] "/Users/brockrowley/Phd in SPED/2020Spring/funprog_blog"` we know where we are (root).
 
-# Create a new directory here
+# Create a new directory 
 
 We want to keep all our data, analyses, and text in one, self-contained, single folder, called the working directory. We will use the `fs package` to do this work for us.
 
@@ -64,7 +70,8 @@ create_setup(here::here("temporary-wd"))
 
 In the code chunk above, we used "temporary-wd" as a placeholder for whatever you want to call your project. If you replace "temporary-wd" with whatever you want to call your project, you will create a new RStudio project, complete with three new folders inside (data, scripts, plots) to get started.
 
-# Data from a CSV
+# Importing data from a CSV
+
 The most common way to get data into R is to store it as a CSV. Drop your data file into the folder we created above called "data" and run the following code chunk to load your data.
 base R has a `read_csv()` command from readr. readr is part of the tidyverse, and `read_csv()` is fast.
 
