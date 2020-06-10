@@ -12,7 +12,7 @@
     "date": "2020-06-01",
     "categories": [],
     "preview": "posts/2020-05-08-blog_post_3/blog_post_3_files/figure-html5/unnamed-chunk-3-1.png",
-    "last_modified": "2020-06-07T23:08:18-07:00",
+    "last_modified": "2020-06-08T09:10:24-07:00",
     "input_file": {}
   },
   {
@@ -28,7 +28,7 @@
     "date": "2020-05-23",
     "categories": [],
     "preview": {},
-    "last_modified": "2020-06-08T12:50:24-07:00",
+    "last_modified": "2020-06-10T09:48:57-07:00",
     "input_file": "stephaniepost.utf8.md"
   },
   {
@@ -44,23 +44,7 @@
     "date": "2020-05-11",
     "categories": [],
     "preview": {},
-    "last_modified": "2020-06-09T10:34:09-07:00",
-    "input_file": "blog_post_one.utf8.md"
-  },
-  {
-    "path": "posts/2020-05-08-akhilas-first-post/",
-    "title": "Akhila's First Post",
-    "description": "A short description of the post.",
-    "author": [
-      {
-        "name": "Akhila Nekkanti",
-        "url": "https://example.com/norajones"
-      }
-    ],
-    "date": "2020-05-08",
-    "categories": [],
-    "preview": {},
-    "last_modified": "2020-05-08T11:04:03-07:00",
+    "last_modified": "2020-06-09T17:24:35-07:00",
     "input_file": {}
   },
   {
@@ -76,7 +60,7 @@
     "date": "2020-05-08",
     "categories": [],
     "preview": {},
-    "last_modified": "2020-06-01T22:00:16-07:00",
+    "last_modified": "2020-06-03T13:06:27-07:00",
     "input_file": {}
   }
 ]
