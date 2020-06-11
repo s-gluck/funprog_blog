@@ -1,11 +1,11 @@
 ---
-title: "GettingStarted_Post"
+title: "Post 1 - Getting started"
 description: |
   Getting started with setting up a project, working directory, subfolders, and loading data.
 author:
   - name: Brock Rowley
-    url: https://example.com/norajones
-date: 05-11-2020
+    url: https://s-gluck.github.io/funprog_blog
+date: 06-09-2020
 output:
   distill::distill_article:
     self_contained: false

@@ -12,7 +12,23 @@
     "date": "2020-06-10",
     "categories": [],
     "preview": {},
-    "last_modified": "2020-06-10T10:31:02-07:00",
+    "last_modified": "2020-06-10T20:16:31-07:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2020-05-11-blog_post_one/",
+    "title": "Post 1 - Getting started",
+    "description": "Getting started with setting up a project, working directory, subfolders, and loading data.",
+    "author": [
+      {
+        "name": "Brock Rowley",
+        "url": "https://s-gluck.github.io/funprog_blog"
+      }
+    ],
+    "date": "2020-06-09",
+    "categories": [],
+    "preview": {},
+    "last_modified": "2020-06-10T20:14:37-07:00",
     "input_file": {}
   },
   {
@@ -28,8 +44,8 @@
     "date": "2020-06-08",
     "categories": [],
     "preview": {},
-    "last_modified": "2020-06-10T17:02:49-07:00",
-    "input_file": "blog_post_2.utf8.md"
+    "last_modified": "2020-06-10T19:06:48-07:00",
+    "input_file": {}
   },
   {
     "path": "posts/2020-05-08-blog_post_3/",
@@ -45,22 +61,6 @@
     "categories": [],
     "preview": "posts/2020-05-08-blog_post_3/blog_post_3_files/figure-html5/unnamed-chunk-5-1.png",
     "last_modified": "2020-06-10T12:12:27-07:00",
-    "input_file": {}
-  },
-  {
-    "path": "posts/2020-05-11-blog_post_one/",
-    "title": "GettingStarted_Post",
-    "description": "Getting started with setting up a project, working directory, subfolders, and loading data.",
-    "author": [
-      {
-        "name": "Brock Rowley",
-        "url": "https://example.com/norajones"
-      }
-    ],
-    "date": "2020-05-11",
-    "categories": [],
-    "preview": {},
-    "last_modified": "2020-06-10T12:39:13-07:00",
     "input_file": {}
   }
 ]

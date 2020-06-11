@@ -36,13 +36,11 @@ The authors of the blog are:
 
 ### The following blog post contain guides related to iteration and writing functions: 
 
-SG: add link once finalized and authors please edit. 
+1) [To setup your project and load data](https://s-gluck.github.io/funprog_blog/posts/2020-05-11-blog_post_one/), by Brock Rowley
 
-1) To setup your project and load data, by Brock Rowley
+2) [To to subset data and output basic descriptives](https://s-gluck.github.io/funprog_blog/posts/2020-05-08-blog_post_2/), by Stephanie Gluck and Akhila Nekkanti
 
-2) To to subset data and output basic descriptives, by Stephanie Gluck and Akhila Nekkanti
-
-3) To visualize your data, by Joanna Wright
+3) [To visualize your data](https://s-gluck.github.io/funprog_blog/posts/2020-05-08-blog_post_3/), by Joanna Wright
 
 ### About the Data 
 
