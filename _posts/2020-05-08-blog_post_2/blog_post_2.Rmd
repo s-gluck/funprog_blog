@@ -35,7 +35,7 @@ Community activity is defined as the change in activity from the baseline days. 
 
 
 ## Loading the Data 
-### Please refer to our blogpost on how to automate your data loading. [You can check out the post here](insert link to Brock's Post)
+### Please refer to our blogpost on how to automate your data loading. [You can check out the post here](https://s-gluck.github.io/funprog_blog/posts/2020-05-11-blog_post_one/)
 
 To create a function that can read in our dataframe and output descriptives, we will need the following packages. If you have not already isntalled them, please use `install.packages(" ")` prior to calling `library()`. 
 
@@ -361,7 +361,7 @@ Note, we are using `data` within `map` because everything is piped to `d2`. Next
 1. If you want to create a function that you can share with your team without requiring them to create extra objects (e.g., `listof_fun`), you can input the list directly into the function like below:
 
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 
 
 descriptives2 <- function(df, funs_to_apply = list(
@@ -379,34 +379,32 @@ descriptives2 <- function(df, funs_to_apply = list(
     select(place, everything())
 }
 
+```
 
-descriptives2(tmp2, sd)
+Let's test it out!
 
-map_dbl(list(mean), ~est_one_fun(tmp2, .x))
-est_one_fun(tmp2, mean)
-is.null(names(list(mean, sd)))
-##create new list  of funs to test
-funlist <- list(
-  n = function(x) length(x),
-  mean = function(x) mean(x, na.rm = TRUE),
-  sd = function(x) sd(x, na.rm = TRUE))
+```{r function-test}
 
+Descriptive_output1 <- d2 %>%
+  mutate(Output = map(data, descriptives2)) %>% 
+  select(-data) %>% 
+  unnest(Output)
 
-#test - works!
-descriptives2(tmp, funs_to_apply = funlist)
-
-#test
-descriptives2(tmp, funs_to_apply = list(mean=mean, sd=sd))
-
-
+Descriptive_output1
 
 ```
 
+We did it again! Woohoo!
 
-```{r, eval = FALSE}
+2. Now let's modify the function so that the person using it can specify exactly what operations they want in their output. 
 
+* #a. We specify that if the type of function(s) supplied by the user is not a list, that we should make it a list, even if this is a list of one.
 
-descriptives2 <- function(df, funs_to_apply = list(
+* #b. Next we specify that if the functions within the list have no names that we should create names, and order them according to the input.
+
+```{r}
+
+descriptives3 <- function(df, funs_to_apply = list(
                                                n = function(x) length(x),
                                                mean = function(x) mean(x, na.rm = TRUE),
                                                sd = function(x) sd(x, na.rm = TRUE),
@@ -414,11 +412,11 @@ descriptives2 <- function(df, funs_to_apply = list(
                                                max = function(x) max(x, na.rm = TRUE)
   )) {
   
-  if(!typeof(funs_to_apply) == "list") {
-    funs_to_apply <- list(funs_to_apply)
+  if(!typeof(funs_to_apply) == "list") { #a
+    funs_to_apply <- list(funs_to_apply) 
   }
-  if(is.null(names(funs_to_apply))) {
-    names(funs_to_apply) <- paste0("f", seq_along(funs_to_apply))
+  if(is.null(names(funs_to_apply))) { #b
+    names(funs_to_apply) <- paste0("Descriptive", seq_along(funs_to_apply))
   }
   
   numeric_df <- df[map_lgl(df, is.numeric)] 
@@ -428,24 +426,19 @@ descriptives2 <- function(df, funs_to_apply = list(
     select(place, everything())
 }
 
-descriptives2(tmp2, sd)
+```
 
-map_dbl(list(mean), ~est_one_fun(tmp2, .x))
-est_one_fun(tmp2, mean)
-is.null(names(list(mean, sd)))
-##create new list  of funs to test
-funlist <- list(
-  n = function(x) length(x),
-  mean = function(x) mean(x, na.rm = TRUE),
-  sd = function(x) sd(x, na.rm = TRUE))
+Again, let's test it out. 
 
+```{r}
+# with one function
+descriptives3(tmp2, mean)
 
-#test - works!
-descriptives2(tmp, funs_to_apply = funlist)
-
-#test
-descriptives2(tmp, funs_to_apply = list(mean=mean, sd=sd))
-
-
+#with two functions
+descriptives3(tmp2, list(mean, sd, min, max))
 
 ```
+
+# CONGRATULATIONS! WE WROTE SOME REALLY COMPLICATED FUNCTIONS. You're a rockstar, seriously. 
+
+To learn more about how to plot this data with iterations, check out Joanna's blog here: [Post #3 by Joanna](https://s-gluck.github.io/funprog_blog/posts/2020-05-08-blog_post_3/).
